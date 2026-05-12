@@ -114,7 +114,25 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "benefits": {
+      "type": "trade-benefits",
+      "blocks": {
+        "b1": { "type": "trade-benefit", "settings": { "icon": "percent", "heading": "30% off everything", "body": "<p>Browse and buy in minutes — no approval gate, no minimums.</p>" } },
+        "b2": { "type": "trade-benefit", "settings": { "icon": "curate", "heading": "We do the sourcing for you", "body": "<p>We'll build a custom collection to your brief, free of charge.</p>" } },
+        "b3": { "type": "trade-benefit", "settings": { "icon": "invoice", "heading": "One order, one invoice", "body": "<p>Consolidated POs across multiple pieces, artists, and frame styles.</p>" } },
+        "b4": { "type": "trade-benefit", "settings": { "icon": "ship", "heading": "Ships from the U.S.", "body": "<p>Faster timelines, easier returns, no import complexity.</p>" } },
+        "b5": { "type": "trade-benefit", "settings": { "icon": "frame", "heading": "Frame to spec", "body": "<p>Custom sizes and finishes that fit your exact space.</p>" } },
+        "b6": { "type": "trade-benefit", "settings": { "icon": "person", "heading": "A real person on your project", "body": "<p>Whether you're browsing solo or working with our curation team.</p>" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"],
+      "settings": {
+        "eyebrow": "What's Included",
+        "heading": "Built for the way designers actually work.",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path"]
+  "order": ["main", "two-path", "benefits"]
 }
