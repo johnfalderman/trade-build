@@ -1,0 +1,80 @@
+{%- comment -%}
+  blocks/_trade-quote.liquid
+  Private block. One quote card: italic blockquote in Playfair Display
+  + attribution line (name, title, firm + meta) in Inter.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<figure class="trade-quote" {{ block.shopify_attributes }}>
+  {%- if s.quote != blank -%}
+    <blockquote class="trade-quote__text">{{ s.quote }}</blockquote>
+  {%- endif -%}
+  <figcaption class="trade-quote__attrib">
+    {%- if s.name != blank -%}
+      <span class="trade-quote__name">{{ s.name | escape }}</span>
+    {%- endif -%}
+    {%- if s.title != blank -%}
+      <span class="trade-quote__title">{{ s.title | escape }}</span>
+    {%- endif -%}
+    {%- if s.firm != blank -%}
+      <span class="trade-quote__firm">{{ s.firm | escape }}</span>
+    {%- endif -%}
+  </figcaption>
+</figure>
+
+{% stylesheet %}
+  .trade-quote {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 44px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: var(--color-background);
+    height: 100%;
+    margin: 0;
+  }
+  .trade-quote__text {
+    font-family: var(--font-heading--family);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 1.8vw, 26px);
+    line-height: 1.35;
+    color: var(--color-foreground-heading);
+    margin: 0;
+    quotes: none;
+  }
+  .trade-quote__text :where(p) { margin: 0; }
+  .trade-quote__attrib {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-block-start: auto;
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--color-border);
+    font-family: var(--font-body--family);
+    color: var(--color-foreground);
+  }
+  .trade-quote__name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .trade-quote__title,
+  .trade-quote__firm {
+    font-size: 14px;
+    color: var(--color-foreground-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Quote",
+  "settings": [
+    { "type": "richtext", "id": "quote", "label": "Quote" },
+    { "type": "text", "id": "name", "label": "Name" },
+    { "type": "text", "id": "title", "label": "Title" },
+    { "type": "text", "id": "firm", "label": "Firm and location" }
+  ]
+}
+{% endschema %}
