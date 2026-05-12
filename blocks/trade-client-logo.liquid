@@ -1,0 +1,53 @@
+{%- comment -%}
+  blocks/trade-client-logo.liquid
+  Public block. A single client/firm logo cell — V1 is text-only with an
+  optional image_picker for when real logo files are supplied.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<div class="trade-client" {{ block.shopify_attributes }}>
+  {%- if s.logo != blank -%}
+    {{ s.logo | image_url: width: 320 | image_tag: widths: '160, 240, 320', alt: s.name, loading: 'lazy', class: 'trade-client__logo' }}
+  {%- elsif s.name != blank -%}
+    <span class="trade-client__name">{{ s.name | escape }}</span>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .trade-client {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 20px 16px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+  }
+  .trade-client__name {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-foreground);
+    letter-spacing: 0.02em;
+  }
+  .trade-client__logo {
+    max-height: 40px;
+    width: auto;
+    opacity: 0.85;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Client",
+  "settings": [
+    { "type": "text", "id": "name", "label": "Firm name" },
+    { "type": "image_picker", "id": "logo", "label": "Logo (optional, supersedes text)" }
+  ],
+  "presets": [
+    { "name": "Trade Client" }
+  ]
+}
+{% endschema %}

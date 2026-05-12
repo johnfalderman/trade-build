@@ -1,0 +1,74 @@
+{%- comment -%}
+  sections/trade-clients.liquid
+  Label + row of client cells. 6 columns on desktop, 2 on mobile, 3 on tablet.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="trade-clients section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  {%- if section.settings.label != blank -%}
+    <p class="trade-clients__label">{{ section.settings.label | escape }}</p>
+  {%- endif -%}
+  <div class="trade-clients__row">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .trade-clients {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .trade-clients__label {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 32px;
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-foreground-muted);
+  }
+  .trade-clients__row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media screen and (min-width: 500px) {
+    .trade-clients__row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media screen and (min-width: 950px) {
+    .trade-clients__row {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Clients",
+  "tag": "section",
+  "class": "trade-clients-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "blocks": [ { "type": "trade-client-logo" } ],
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Trusted by designers across hospitality, restaurant, residential, and event production"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}

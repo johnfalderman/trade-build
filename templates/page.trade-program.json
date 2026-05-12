@@ -188,7 +188,24 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "clients": {
+      "type": "trade-clients",
+      "blocks": {
+        "c1": { "type": "trade-client-logo", "settings": { "name": "Hybrid Creative" } },
+        "c2": { "type": "trade-client-logo", "settings": { "name": "Proper Fun Events" } },
+        "c3": { "type": "trade-client-logo", "settings": { "name": "Wolfgang Pichler" } },
+        "c4": { "type": "trade-client-logo", "settings": { "name": "The Desert Social" } },
+        "c5": { "type": "trade-client-logo", "settings": { "name": "Sun at Six" } },
+        "c6": { "type": "trade-client-logo", "settings": { "name": "Phanomen Design" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6"],
+      "settings": {
+        "label": "Trusted by designers across hospitality, restaurant, residential, and event production",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients"]
 }
