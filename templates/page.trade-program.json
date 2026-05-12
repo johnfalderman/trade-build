@@ -22,7 +22,7 @@
             "type_preset": "h1",
             "alignment": "left",
             "max_width": "narrow",
-            "font": "var(--font-primary--family)"
+            "font": "var(--font-heading--family)"
           }
         },
         "subhead": {
@@ -45,7 +45,8 @@
           "type": "button",
           "settings": {
             "label": "Learn More",
-            "link": "#"
+            "link": "#",
+            "style_class": "button-secondary"
           }
         }
       },
@@ -57,7 +58,7 @@
         "gap": 20,
         "section_width": "page-width",
         "section_height": "medium",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-trade-cream",
         "toggle_overlay": false,
         "padding-block-start": 60,
         "padding-block-end": 60
