@@ -295,7 +295,39 @@
         "section_width": "full-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "newsletter": {
+      "type": "trade-newsletter",
+      "blocks": {
+        "newsletter-signup": {
+          "type": "email-signup",
+          "static": true,
+          "settings": {
+            "heading": "",
+            "heading_preset": "h3",
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 0,
+            "integrated_button": false,
+            "display_type": "text",
+            "label": "Subscribe",
+            "input_type_preset": "paragraph",
+            "button_type_preset": "paragraph",
+            "style_class": "button",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        }
+      },
+      "settings": {
+        "heading": "Stay in the Trade Loop",
+        "body": "Trade-only drops, curation tips, and project inspiration. No consumer promos."
+      }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate", "final-cta"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate", "final-cta", "newsletter"]
 }
