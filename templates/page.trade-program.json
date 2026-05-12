@@ -281,7 +281,21 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "final-cta": {
+      "type": "trade-final-cta",
+      "settings": {
+        "eyebrow": "Ready When You Are",
+        "heading": "Apply for trade access in under two minutes.",
+        "subhead": "<p>Quick approval, no minimums, and your 30% discount goes live immediately. Or skip ahead and brief our curation team on your next project.</p>",
+        "primary_label": "Join Trade Program",
+        "primary_link": "shopify://pages/trade-application",
+        "secondary_label": "Request a Curated Collection",
+        "secondary_link": "#",
+        "section_width": "full-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate", "final-cta"]
 }
