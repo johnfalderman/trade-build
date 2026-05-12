@@ -28,7 +28,7 @@
         "subhead": {
           "type": "text",
           "settings": {
-            "text": "<p>Society6 is a curated art retailer — we handpick artists and designs across Wall Art, Home Decor, and lifestyle products, unlike open marketplaces with unlimited uploads. Trade members get 30% off everything, with the option to source direct or hand the brief to our curation team.</p>",
+            "text": "<p>30% trade pricing on handpicked Wall Art, Home Decor, and lifestyle. Source direct or have our curation team build a collection for your project.</p>",
             "type_preset": "rte",
             "alignment": "left",
             "max_width": "normal"
