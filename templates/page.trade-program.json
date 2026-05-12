@@ -244,7 +244,44 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "catalog-gate": {
+      "type": "trade-catalog-gate",
+      "blocks": {
+        "catalog-signup": {
+          "type": "email-signup",
+          "static": true,
+          "settings": {
+            "heading": "",
+            "heading_preset": "h3",
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 0,
+            "integrated_button": false,
+            "display_type": "text",
+            "label": "Send Me the Catalog",
+            "input_type_preset": "paragraph",
+            "button_type_preset": "paragraph",
+            "style_class": "button",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        }
+      },
+      "settings": {
+        "eyebrow": "Free Download",
+        "heading": "Get the 2026 Trade Catalog.",
+        "subhead": "<p>A curated lookbook of our most-requested artists, framing options, and project-ready collections — sized for hospitality, residential, and commercial spaces.</p>",
+        "fineprint": "By requesting the catalog, you agree to receive trade emails from Society6. Unsubscribe anytime.",
+        "cover_image": "shopify://shop_images/photo-1503602642458-232111445657.jpg",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate"]
 }
