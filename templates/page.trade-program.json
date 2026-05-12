@@ -132,7 +132,33 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "how-it-works": {
+      "type": "trade-how-it-works",
+      "blocks": {
+        "ss1": { "type": "_trade-how-step", "settings": { "number": "1", "heading": "Apply for trade access", "body": "<p>Quick approval, then your discount is live.</p>" } },
+        "ss2": { "type": "_trade-how-step", "settings": { "number": "2", "heading": "Browse 1M+ works", "body": "<p>Filter by style, color, medium, subject. Built to be fast.</p>" } },
+        "ss3": { "type": "_trade-how-step", "settings": { "number": "3", "heading": "Checkout with 30% off", "body": "<p>Discount auto-applies. Ships from the U.S.</p>" } },
+        "fs1": { "type": "_trade-how-step", "settings": { "number": "1", "heading": "Share your project", "body": "<p>Tell us the space, the vibe, the timeline.</p>" } },
+        "fs2": { "type": "_trade-how-step", "settings": { "number": "2", "heading": "We build your collection", "body": "<p>Our curation team matches your vision.</p>" } },
+        "fs3": { "type": "_trade-how-step", "settings": { "number": "3", "heading": "Review, approve, done", "body": "<p>We produce and ship from the U.S. with your 30% discount.</p>" } }
+      },
+      "block_order": ["ss1", "ss2", "ss3", "fs1", "fs2", "fs3"],
+      "settings": {
+        "eyebrow": "How It Works",
+        "heading": "Pick your path. Both end with art on the wall.",
+        "col1_title": "Self-Serve Path",
+        "col1_subhead": "For when you want full control",
+        "col1_cta_label": "Join Trade Program",
+        "col1_cta_link": "shopify://pages/trade-application",
+        "col2_title": "Full-Service Path",
+        "col2_subhead": "For when you want it done for you",
+        "col2_cta_label": "Request a Curated Collection",
+        "col2_cta_link": "#",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path", "benefits"]
+  "order": ["main", "two-path", "benefits", "how-it-works"]
 }
