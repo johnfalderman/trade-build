@@ -1,0 +1,147 @@
+{%- comment -%}
+  sections/trade-two-path.liquid
+  Section header (eyebrow + heading + subhead, top-aligned center) + a
+  2-column grid of trade-path-card blocks (1-column on mobile). Strictly
+  two cards (min_blocks/max_blocks=2). Used on /pages/trade-program to
+  make the Self-Serve vs Full-Service paths explicit.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="trade-two-path section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  {% if request.visual_preview_mode %}data-shopify-visual-preview{% endif %}
+>
+  <div class="trade-two-path__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="trade-two-path__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="trade-two-path__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subhead != blank -%}
+      <div class="trade-two-path__subhead">{{ section.settings.subhead }}</div>
+    {%- endif -%}
+  </div>
+
+  <div class="trade-two-path__grid">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .trade-two-path {
+    padding-block: clamp(64px, 8vw, 112px);
+  }
+
+  .trade-two-path__header {
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
+    margin-block-end: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .trade-two-path__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+
+  .trade-two-path__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 3.4vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+
+  .trade-two-path__subhead {
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+    max-width: 56ch;
+    margin-inline: auto;
+  }
+
+  .trade-two-path__subhead :where(p) {
+    margin: 0;
+  }
+
+  .trade-two-path__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .trade-two-path__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Two-Path",
+  "tag": "section",
+  "class": "trade-two-path-wrapper section-wrapper",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "blocks": [
+    { "type": "trade-path-card" }
+  ],
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Your Way, Your Pace"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Two ways to source curated art for your project."
+    },
+    {
+      "type": "richtext",
+      "id": "subhead",
+      "label": "Subhead"
+    },
+    {
+      "type": "header",
+      "content": "Section appearance"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-trade-cream"
+    }
+  ]
+}
+{% endschema %}
