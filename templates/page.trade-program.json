@@ -205,7 +205,46 @@
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "explore": {
+      "type": "trade-explore-blocks",
+      "blocks": {
+        "e1": {
+          "type": "trade-explore-block",
+          "settings": {
+            "title": "Trade Program Styles",
+            "subtitle": "Browse by aesthetic",
+            "link": "shopify://pages/trade-program-styles",
+            "image": "shopify://shop_images/photo-1493809842364-78817add7ffb.jpg"
+          }
+        },
+        "e2": {
+          "type": "trade-explore-block",
+          "settings": {
+            "title": "Our Favorite Themes",
+            "subtitle": "Curated mood collections",
+            "link": "shopify://pages/trade-program-themes",
+            "image": "shopify://shop_images/photo-1567538096630-e0c55bd6374c.jpg"
+          }
+        },
+        "e3": {
+          "type": "trade-explore-block",
+          "settings": {
+            "title": "Trade Catalog",
+            "subtitle": "Download the PDF lookbook",
+            "link": "#catalog",
+            "image": "shopify://shop_images/photo-1505691938895-1758d7feb511.jpg"
+          }
+        }
+      },
+      "block_order": ["e1", "e2", "e3"],
+      "settings": {
+        "eyebrow": "Explore",
+        "heading": "Start with what fits your project.",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore"]
 }

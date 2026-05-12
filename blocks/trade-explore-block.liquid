@@ -1,0 +1,102 @@
+{%- comment -%}
+  blocks/trade-explore-block.liquid
+  Public block. Big image card with a dark gradient overlay and a
+  bottom-left title + subtitle. The whole card is a single anchor.
+  4:5 aspect at desktop and mobile.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<a class="trade-explore" href="{{ s.link | default: '#' }}" {{ block.shopify_attributes }}>
+  {%- if s.image != blank -%}
+    {{ s.image | image_url: width: 1200 | image_tag:
+      widths: '400, 600, 800, 1200',
+      sizes: '(min-width: 750px) 33vw, 100vw',
+      alt: s.title,
+      loading: 'lazy',
+      class: 'trade-explore__image'
+    }}
+  {%- else -%}
+    <div class="trade-explore__image trade-explore__image--placeholder"></div>
+  {%- endif -%}
+  <div class="trade-explore__overlay" aria-hidden="true"></div>
+  <div class="trade-explore__copy">
+    {%- if s.title != blank -%}
+      <h3 class="trade-explore__title">{{ s.title | escape }}</h3>
+    {%- endif -%}
+    {%- if s.subtitle != blank -%}
+      <p class="trade-explore__subtitle">{{ s.subtitle | escape }}</p>
+    {%- endif -%}
+  </div>
+</a>
+
+{% stylesheet %}
+  .trade-explore {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-decoration: none;
+    color: #ffffff;
+    isolation: isolate;
+  }
+  .trade-explore__image,
+  .trade-explore__image--placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+  }
+  .trade-explore:hover .trade-explore__image {
+    transform: scale(1.03);
+  }
+  .trade-explore__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.65) 100%);
+    z-index: 1;
+  }
+  .trade-explore__copy {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: clamp(20px, 3.5vw, 36px);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .trade-explore__title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: clamp(28px, 4.5vw, 52px);
+    line-height: 1.0;
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.35);
+  }
+  .trade-explore__subtitle {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Explore Block",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "image_picker", "id": "image", "label": "Image (4:5 aspect)" }
+  ],
+  "presets": [ { "name": "Trade Explore Block" } ]
+}
+{% endschema %}
