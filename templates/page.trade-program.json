@@ -1,70 +1,83 @@
 {
   "sections": {
     "main": {
-      "type": "hero",
+      "type": "media-with-content",
       "blocks": {
-        "eyebrow": {
-          "type": "text",
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
           "settings": {
-            "text": "<p>Society6 Trade Program</p>",
-            "type_preset": "h6",
-            "alignment": "left",
-            "font": "var(--font-accent--family)",
-            "font_size": "0.85rem",
-            "case": "uppercase",
-            "letter_spacing": "0.18em"
+            "media_type": "image",
+            "image": "shopify://shop_images/photo-1556228453-efd6c1ff04f6.jpg",
+            "image_position": "cover"
           }
         },
-        "headline": {
-          "type": "text",
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
           "settings": {
-            "text": "<h1>Art for Every Project.<br>Sourced, Curated, Delivered.</h1>",
-            "type_preset": "h1",
-            "alignment": "left",
-            "max_width": "narrow",
-            "font": "var(--font-heading--family)"
-          }
-        },
-        "subhead": {
-          "type": "text",
-          "settings": {
-            "text": "<p>30% trade pricing on handpicked Wall Art, Home Decor, and lifestyle. Source direct or have our curation team build a collection for your project.</p>",
-            "type_preset": "rte",
-            "alignment": "left",
-            "max_width": "normal"
-          }
-        },
-        "button_primary": {
-          "type": "button",
-          "settings": {
-            "label": "Join Trade Program",
-            "link": "shopify://pages/trade-application"
-          }
-        },
-        "button_secondary": {
-          "type": "button",
-          "settings": {
-            "label": "Learn More",
-            "link": "#",
-            "style_class": "button-secondary"
-          }
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 20
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Society6 Trade Program</p>",
+                "type_preset": "h6",
+                "alignment": "left",
+                "font": "var(--font-accent--family)",
+                "font_size": "0.85rem",
+                "case": "uppercase",
+                "letter_spacing": "0.18em"
+              }
+            },
+            "headline": {
+              "type": "text",
+              "settings": {
+                "text": "<h1>Art for Every Project.<br>Sourced, Curated, Delivered.</h1>",
+                "type_preset": "h1",
+                "alignment": "left",
+                "max_width": "narrow",
+                "font": "var(--font-heading--family)"
+              }
+            },
+            "subhead": {
+              "type": "text",
+              "settings": {
+                "text": "<p>30% trade pricing on handpicked Wall Art, Home Decor, and lifestyle. Source direct or have our curation team build a collection for your project.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "button_primary": {
+              "type": "button",
+              "settings": {
+                "label": "Join Trade Program",
+                "link": "shopify://pages/trade-application"
+              }
+            },
+            "button_secondary": {
+              "type": "button",
+              "settings": {
+                "label": "Learn More",
+                "link": "#",
+                "style_class": "button-secondary"
+              }
+            }
+          },
+          "block_order": ["eyebrow", "headline", "subhead", "button_primary", "button_secondary"]
         }
       },
-      "block_order": ["eyebrow", "headline", "subhead", "button_primary", "button_secondary"],
       "settings": {
-        "content_direction": "row",
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "center",
-        "vertical_on_mobile": true,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 48,
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "auto",
         "section_width": "page-width",
-        "section_height": "large",
+        "extend_media": false,
         "color_scheme": "scheme-trade-cream",
-        "toggle_overlay": false,
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/photo-1556228453-efd6c1ff04f6.jpg",
         "padding-block-start": 60,
         "padding-block-end": 60
       }
