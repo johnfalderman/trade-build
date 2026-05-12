@@ -1,0 +1,68 @@
+{
+  "sections": {
+    "main": {
+      "type": "hero",
+      "blocks": {
+        "eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Society6 Trade Program</p>",
+            "type_preset": "h6",
+            "alignment": "left",
+            "font": "var(--font-accent--family)",
+            "font_size": "0.85rem",
+            "case": "uppercase",
+            "letter_spacing": "0.18em"
+          }
+        },
+        "headline": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Art for Every Project.<br>Sourced, Curated, Delivered.</h1>",
+            "type_preset": "h1",
+            "alignment": "left",
+            "max_width": "narrow",
+            "font": "var(--font-primary--family)"
+          }
+        },
+        "subhead": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Society6 is a curated art retailer — we handpick artists and designs across Wall Art, Home Decor, and lifestyle products, unlike open marketplaces with unlimited uploads. Trade members get 30% off everything, with the option to source direct or hand the brief to our curation team.</p>",
+            "type_preset": "rte",
+            "alignment": "left",
+            "max_width": "normal"
+          }
+        },
+        "button_primary": {
+          "type": "button",
+          "settings": {
+            "label": "Join Trade Program",
+            "link": "shopify://pages/trade-application"
+          }
+        },
+        "button_secondary": {
+          "type": "button",
+          "settings": {
+            "label": "Learn More",
+            "link": "#"
+          }
+        }
+      },
+      "block_order": ["eyebrow", "headline", "subhead", "button_primary", "button_secondary"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 20,
+        "section_width": "page-width",
+        "section_height": "medium",
+        "color_scheme": "scheme-1",
+        "toggle_overlay": false,
+        "padding-block-start": 60,
+        "padding-block-end": 60
+      }
+    }
+  },
+  "order": ["main"]
+}
