@@ -81,7 +81,40 @@
         "padding-block-start": 60,
         "padding-block-end": 60
       }
+    },
+    "two-path": {
+      "type": "trade-two-path",
+      "blocks": {
+        "self-serve-card": {
+          "type": "trade-path-card",
+          "settings": {
+            "tag": "Self-Serve",
+            "heading": "Source, choose, ship.",
+            "body": "<p>Explore the handpicked catalog at your own pace. 30% trade discount applies automatically — no codes, no minimums, no waiting. Add to cart and go.</p>",
+            "button_label": "Join Trade Program",
+            "button_link": "shopify://pages/trade-application"
+          }
+        },
+        "full-service-card": {
+          "type": "trade-path-card",
+          "settings": {
+            "tag": "Full-Service",
+            "heading": "We do the sourcing for you.",
+            "body": "<p>Share your mood board and project brief. Our curation team does the sourcing, recommends framing and sizing, and delivers a custom collection for your review. You approve, we produce.</p>",
+            "button_label": "Request a Curated Collection",
+            "button_link": "#"
+          }
+        }
+      },
+      "block_order": ["self-serve-card", "full-service-card"],
+      "settings": {
+        "eyebrow": "Your Way, Your Pace",
+        "heading": "Two ways to source curated art for your project.",
+        "subhead": "<p>Society6 is a curated art retailer — we handpick artists and designs across Wall Art, Home Decor, and lifestyle products, unlike open marketplaces with unlimited uploads. Run with it yourself, or hand the brief to our curation team. Either way, your 30% trade discount applies.</p>",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
     }
   },
-  "order": ["main"]
+  "order": ["main", "two-path"]
 }
