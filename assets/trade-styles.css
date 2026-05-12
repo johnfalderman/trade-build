@@ -11,19 +11,12 @@
  */
 
 /* ---------------------------------------------------------------- *
- * 1. Hide Horizon's placeholder SVG on the text-only hero variant   *
- *    of /pages/trade-program. The placeholder is hardcoded into     *
- *    sections/hero.liquid and renders whenever media_count == 0;    *
- *    suppressing here avoids forking the Horizon-shipped section.   *
+ * 1. (Removed) — was hiding the hero placeholder SVG when image_1   *
+ *    was unset. Now that the trade hero has a real image, this      *
+ *    rule would also hide the real image. If we ever go back to a   *
+ *    text-only hero, restore the .hero__media-grid display:none     *
+ *    rule scoped to main[data-template="page.trade-program"].       *
  * ---------------------------------------------------------------- */
-
-main[data-template="page.trade-program"] .hero__media-grid {
-  display: none;
-}
-
-main[data-template="page.trade-program"] .hero__container {
-  background: rgb(var(--color-background));
-}
 
 /* ---------------------------------------------------------------- *
  * 2. Brand-spec button refinements for the Trade Cream scheme.      *
