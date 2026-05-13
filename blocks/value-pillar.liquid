@@ -1,0 +1,49 @@
+{%- comment -%}
+  blocks/value-pillar.liquid
+  Public block. Single value-pillar chip — small square-bordered cell
+  with an uppercase letter-spaced label. Reusable on any S6 page; not
+  trade-program-specific.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<div class="value-pillar" {{ block.shopify_attributes }}>
+  {%- if s.label != blank -%}
+    <span class="value-pillar__label">{{ s.label | escape }}</span>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .value-pillar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 18px 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    border-radius: 0;
+    text-align: center;
+  }
+  .value-pillar__label {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-foreground);
+    line-height: 1.2;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Value Pillar",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label" }
+  ],
+  "presets": [
+    { "name": "Value Pillar" }
+  ]
+}
+{% endschema %}
