@@ -51,12 +51,18 @@
   .trade-social__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
   }
   @media screen and (min-width: 750px) {
     .trade-social__grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
+  }
+  /* 3-up density: tighten quote-card internal padding here without
+     affecting the same block when it's used on article pages. */
+  @media screen and (min-width: 750px) {
+    .trade-social .trade-quote { padding: 32px; }
   }
 {% endstylesheet %}
 
@@ -67,7 +73,7 @@
   "class": "trade-social-wrapper section-wrapper",
   "disabled_on": { "groups": ["header"] },
   "blocks": [ { "type": "_trade-quote" } ],
-  "max_blocks": 2,
+  "max_blocks": 3,
   "settings": [
     { "type": "header", "content": "Section header" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From the Field" },

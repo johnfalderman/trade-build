@@ -179,9 +179,18 @@
             "title": "Proper Fun Events",
             "firm": "NYC"
           }
+        },
+        "q3": {
+          "type": "_trade-quote",
+          "settings": {
+            "quote": "<p>Society6 became my favorite source because the wooden panels don't reflect, are affordable, and perfect for vacation homes.</p>",
+            "name": "Connie, Interior Designer",
+            "title": "Wolfgang Pichler · Desert STR Projects, Joshua Tree & Palm Springs",
+            "firm": ""
+          }
         }
       },
-      "block_order": ["q1", "q2"],
+      "block_order": ["q1", "q2", "q3"],
       "settings": {
         "eyebrow": "From the Field",
         "heading": "What our trade members are saying.",
