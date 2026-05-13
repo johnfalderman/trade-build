@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "trade-case-study-article",
+      "settings": {
+        "products_heading": "Featured in this project",
+        "cta_primary_label": "Join Trade Program",
+        "cta_primary_link": "shopify://pages/trade-application",
+        "cta_secondary_label": "Request a Curated Collection",
+        "cta_secondary_link": "#",
+        "color_scheme": "scheme-trade-cream"
+      }
+    }
+  },
+  "order": ["main"]
+}

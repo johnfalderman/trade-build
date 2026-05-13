@@ -1,0 +1,603 @@
+{%- comment -%}
+  sections/trade-case-study-article.liquid
+  Article body for /blogs/trade-case-studies/* articles using
+  template_suffix 'trade-case-study'. Reads heavily from
+  article.metafields.trade.case_study_* — see ARTICLE owner type
+  metafield definitions for the schema.
+
+  Composition (top → bottom):
+    1. Hero: vertical eyebrow, H1 title, firm/location meta, image
+    2. Quick facts row (4 columns: Firm / Vertical / Location / Featured Products count)
+    3. Article body (article.content)
+    4. Featured pull-quote
+    5. Featured products grid (skipped if metafield empty)
+    6. Additional quotes (quote_2 + quote_3) side-by-side
+    7. Visit firm CTA (external link, _blank)
+    8. Final CTA (Join + Request Curation)
+    9. Related case studies (2 most recent other articles in this blog)
+{%- endcomment -%}
+
+{%- assign mf       = article.metafields.trade -%}
+{%- assign firm     = mf.case_study_firm_name.value | default: '' -%}
+{%- assign firm_url = mf.case_study_firm_url.value  | default: '' -%}
+{%- assign vertical = mf.case_study_vertical.value  | default: '' -%}
+{%- assign location = mf.case_study_location.value  | default: '' -%}
+{%- assign principal = mf.case_study_principal.value | default: '' -%}
+{%- assign featured_quote = mf.case_study_featured_quote.value | default: '' -%}
+{%- assign quote_2  = mf.case_study_quote_2.value  | default: '' -%}
+{%- assign quote_3  = mf.case_study_quote_3.value  | default: '' -%}
+{%- assign featured_products = mf.case_study_featured_products.value -%}
+{%- assign fp_count = 0 -%}
+{%- if featured_products -%}{%- assign fp_count = featured_products.size -%}{%- endif -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<article class="case-study color-{{ section.settings.color_scheme }}">
+
+  {%- comment -%} 1. Hero {%- endcomment -%}
+  <header class="case-study__hero">
+    <div class="case-study__hero-inner">
+      {%- if vertical != blank -%}
+        <p class="case-study__eyebrow">{{ vertical | escape }}</p>
+      {%- endif -%}
+      <h1 class="case-study__title">{{ article.title | escape }}</h1>
+      {%- if firm != blank or location != blank -%}
+        <p class="case-study__meta">
+          {%- if firm != blank -%}{{ firm | escape }}{%- endif -%}
+          {%- if firm != blank and location != blank -%} · {% endif -%}
+          {%- if location != blank -%}{{ location | escape }}{%- endif -%}
+        </p>
+      {%- endif -%}
+    </div>
+    {%- if article.image != blank -%}
+      <div class="case-study__hero-media">
+        {{ article.image | image_url: width: 1600 | image_tag:
+          widths: '600, 800, 1200, 1600',
+          sizes: '(min-width: 750px) 90vw, 100vw',
+          alt: article.title,
+          class: 'case-study__hero-image',
+          fetchpriority: 'high'
+        }}
+      </div>
+    {%- endif -%}
+  </header>
+
+  {%- comment -%} 2. Quick facts row {%- endcomment -%}
+  <section class="case-study__facts">
+    <div class="case-study__facts-grid">
+      <div class="case-study__fact">
+        <p class="case-study__fact-label">Firm</p>
+        <p class="case-study__fact-value">{{ firm | default: '—' | escape }}</p>
+      </div>
+      <div class="case-study__fact">
+        <p class="case-study__fact-label">Vertical</p>
+        <p class="case-study__fact-value">{{ vertical | default: '—' | escape }}</p>
+      </div>
+      <div class="case-study__fact">
+        <p class="case-study__fact-label">Location</p>
+        <p class="case-study__fact-value">{{ location | default: '—' | escape }}</p>
+      </div>
+      <div class="case-study__fact">
+        <p class="case-study__fact-label">Featured Products</p>
+        <p class="case-study__fact-value">{%- if fp_count > 0 -%}{{ fp_count }}{%- else -%}—{%- endif -%}</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 3. Article body {%- endcomment -%}
+  <section class="case-study__body">
+    <div class="case-study__body-inner rte">
+      {{ article.content }}
+    </div>
+  </section>
+
+  {%- comment -%} 4. Featured pull-quote {%- endcomment -%}
+  {%- if featured_quote != blank -%}
+    <section class="case-study__pullquote">
+      <figure class="case-study__pullquote-inner">
+        <blockquote class="case-study__pullquote-text">{{ featured_quote | newline_to_br }}</blockquote>
+        {%- if principal != blank or firm != blank -%}
+          <figcaption class="case-study__pullquote-attrib">
+            {%- if principal != blank -%}{{ principal | escape }}{%- endif -%}
+            {%- if principal != blank and firm != blank -%} · {% endif -%}
+            {%- if firm != blank -%}<span class="case-study__pullquote-firm">{{ firm | escape }}</span>{%- endif -%}
+          </figcaption>
+        {%- endif -%}
+      </figure>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} 5. Featured products grid (only if metafield non-empty) {%- endcomment -%}
+  {%- if fp_count > 0 -%}
+    <section class="case-study__products">
+      <div class="case-study__products-inner">
+        <h2 class="case-study__products-heading">{{ section.settings.products_heading | escape }}</h2>
+        <div class="case-study__products-grid">
+          {%- for p in featured_products -%}
+            <a class="case-study__product" href="{{ p.url }}">
+              {%- if p.featured_image != blank -%}
+                {{ p.featured_image | image_url: width: 600 | image_tag:
+                  widths: '300, 450, 600',
+                  sizes: '(min-width: 750px) 25vw, 50vw',
+                  alt: p.title,
+                  class: 'case-study__product-image',
+                  loading: 'lazy'
+                }}
+              {%- endif -%}
+              <p class="case-study__product-title">{{ p.title | escape }}</p>
+              <p class="case-study__product-price">{{ p.price | money }}</p>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} 6. Additional quotes side-by-side {%- endcomment -%}
+  {%- if quote_2 != blank or quote_3 != blank -%}
+    <section class="case-study__quotes">
+      <div class="case-study__quotes-grid">
+        {%- if quote_2 != blank -%}
+          <figure class="case-study__quote-card">
+            <blockquote class="case-study__quote-text">{{ quote_2 | newline_to_br }}</blockquote>
+            {%- if firm != blank -%}
+              <figcaption class="case-study__quote-attrib">{{ firm | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+        {%- endif -%}
+        {%- if quote_3 != blank -%}
+          <figure class="case-study__quote-card">
+            <blockquote class="case-study__quote-text">{{ quote_3 | newline_to_br }}</blockquote>
+            {%- if firm != blank -%}
+              <figcaption class="case-study__quote-attrib">{{ firm | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} 7. Visit firm link {%- endcomment -%}
+  {%- if firm_url != blank and firm != blank -%}
+    <section class="case-study__visit">
+      <a href="{{ firm_url }}" class="case-study__visit-link" target="_blank" rel="noopener">
+        Visit {{ firm | escape }} →
+      </a>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} 8. Final CTA (Apply + Request Curation) {%- endcomment -%}
+  <section class="case-study__final-cta">
+    <div class="case-study__final-cta-inner">
+      <p class="case-study__final-cta-eyebrow">Ready When You Are</p>
+      <h2 class="case-study__final-cta-heading">Apply for trade access in under two minutes.</h2>
+      <p class="case-study__final-cta-sub">Quick approval, no minimums, and your 30% discount goes live immediately. Or skip ahead and brief our curation team on your next project.</p>
+      <div class="case-study__final-cta-buttons">
+        <a class="case-study__btn case-study__btn--primary" href="{{ section.settings.cta_primary_link | default: '/pages/trade-application' }}">{{ section.settings.cta_primary_label | default: 'Join Trade Program' | escape }}</a>
+        <a class="case-study__btn case-study__btn--secondary" href="{{ section.settings.cta_secondary_link | default: '#' }}">{{ section.settings.cta_secondary_label | default: 'Request a Curated Collection' | escape }}</a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 9. Related case studies (2 most recent in the same blog, excluding current) {%- endcomment -%}
+  {%- if article.blog != blank -%}
+    {%- assign related = article.blog.articles | sort: 'published_at' | reverse -%}
+    {%- assign related_shown = 0 -%}
+    <section class="case-study__related">
+      <div class="case-study__related-inner">
+        <h2 class="case-study__related-heading">More case studies</h2>
+        <div class="case-study__related-grid">
+          {%- for a in related -%}
+            {%- if a.id != article.id and related_shown < 2 -%}
+              <a class="case-study__related-card" href="{{ a.url }}">
+                {%- if a.image != blank -%}
+                  {{ a.image | image_url: width: 800 | image_tag:
+                    widths: '400, 600, 800',
+                    sizes: '(min-width: 750px) 45vw, 100vw',
+                    alt: a.title,
+                    class: 'case-study__related-image',
+                    loading: 'lazy'
+                  }}
+                {%- endif -%}
+                <div class="case-study__related-copy">
+                  {%- assign a_vertical = a.metafields.trade.case_study_vertical.value -%}
+                  {%- if a_vertical != blank -%}
+                    <p class="case-study__related-eyebrow">{{ a_vertical | escape }}</p>
+                  {%- endif -%}
+                  <h3 class="case-study__related-title">{{ a.title | escape }}</h3>
+                  {%- assign a_firm = a.metafields.trade.case_study_firm_name.value -%}
+                  {%- if a_firm != blank -%}
+                    <p class="case-study__related-firm">{{ a_firm | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </a>
+              {%- assign related_shown = related_shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+</article>
+
+{% stylesheet %}
+  .case-study {
+    --case-page-max: 1100px;
+    --case-narrow-max: 720px;
+    --case-pad: clamp(20px, 4vw, 56px);
+  }
+  .case-study > section,
+  .case-study > header {
+    padding-inline: var(--case-pad);
+  }
+
+  /* 1. Hero */
+  .case-study__hero {
+    padding-block: clamp(48px, 6vw, 80px) clamp(32px, 4vw, 48px);
+  }
+  .case-study__hero-inner {
+    max-width: var(--case-narrow-max);
+    margin-inline: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-block-end: clamp(32px, 4vw, 56px);
+  }
+  .case-study__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .case-study__title {
+    font-family: var(--font-heading--family);
+    font-size: clamp(36px, 5.4vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+    color: var(--color-foreground-heading);
+    letter-spacing: -0.005em;
+  }
+  .case-study__meta {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .case-study__hero-media {
+    max-width: var(--case-page-max);
+    margin-inline: auto;
+  }
+  .case-study__hero-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* 2. Quick facts */
+  .case-study__facts {
+    padding-block: 32px;
+    border-block: 1px solid var(--color-border);
+  }
+  .case-study__facts-grid {
+    max-width: var(--case-page-max);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 32px;
+  }
+  @media screen and (min-width: 750px) {
+    .case-study__facts-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .case-study__fact { display: flex; flex-direction: column; gap: 6px; }
+  .case-study__fact-label {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .case-study__fact-value {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    color: var(--color-foreground);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  /* 3. Article body */
+  .case-study__body { padding-block: clamp(48px, 6vw, 80px); }
+  .case-study__body-inner {
+    max-width: var(--case-narrow-max);
+    margin-inline: auto;
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--color-foreground);
+  }
+  .case-study__body-inner :where(h2) {
+    font-family: var(--font-heading--family);
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-foreground-heading);
+    margin: 2em 0 0.5em;
+  }
+  .case-study__body-inner :where(h3) {
+    font-family: var(--font-heading--family);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-foreground-heading);
+    margin: 1.5em 0 0.4em;
+  }
+  .case-study__body-inner :where(p) { margin: 0 0 1em 0; }
+  .case-study__body-inner :where(p:first-child) { margin-top: 0; }
+  .case-study__body-inner :where(p:last-child) { margin-bottom: 0; }
+
+  /* 4. Pull quote */
+  .case-study__pullquote { padding-block: clamp(56px, 7vw, 96px); }
+  .case-study__pullquote-inner {
+    max-width: var(--case-narrow-max);
+    margin: 0 auto;
+    text-align: center;
+  }
+  .case-study__pullquote-text {
+    font-family: var(--font-heading--family);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.3;
+    color: var(--color-foreground-heading);
+    margin: 0 0 24px 0;
+    quotes: '\201C' '\201D';
+  }
+  .case-study__pullquote-text::before { content: open-quote; }
+  .case-study__pullquote-text::after { content: close-quote; }
+  .case-study__pullquote-attrib {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: var(--color-foreground-muted);
+  }
+  .case-study__pullquote-firm { font-weight: 600; color: var(--color-foreground); }
+
+  /* 5. Featured products grid */
+  .case-study__products { padding-block: clamp(48px, 6vw, 80px); }
+  .case-study__products-inner { max-width: var(--case-page-max); margin-inline: auto; }
+  .case-study__products-heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: var(--color-foreground-heading);
+  }
+  .case-study__products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media screen and (min-width: 750px) {
+    .case-study__products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  }
+  .case-study__product { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; }
+  .case-study__product-image { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+  .case-study__product-title {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-foreground);
+    margin: 4px 0 0 0;
+    line-height: 1.3;
+  }
+  .case-study__product-price {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+
+  /* 6. Additional quotes */
+  .case-study__quotes { padding-block: clamp(48px, 6vw, 80px); }
+  .case-study__quotes-grid {
+    max-width: var(--case-page-max);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  @media screen and (min-width: 750px) {
+    .case-study__quotes-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  }
+  .case-study__quote-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    padding: 32px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .case-study__quote-text {
+    font-family: var(--font-heading--family);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--color-foreground-heading);
+    margin: 0;
+  }
+  .case-study__quote-attrib {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    color: var(--color-foreground-muted);
+    font-weight: 600;
+  }
+
+  /* 7. Visit firm */
+  .case-study__visit { padding-block: clamp(24px, 3vw, 40px); text-align: center; }
+  .case-study__visit-link {
+    font-family: var(--font-accent--family);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground);
+    text-decoration: none;
+    border-block-end: 1.5px solid var(--color-foreground);
+    padding-block-end: 4px;
+  }
+  .case-study__visit-link:hover { color: var(--color-foreground-muted); border-block-end-color: var(--color-foreground-muted); }
+
+  /* 8. Final CTA */
+  .case-study__final-cta {
+    padding-block: clamp(64px, 8vw, 112px);
+    background: #f1ebe2;
+    margin-block-start: clamp(48px, 6vw, 80px);
+  }
+  .case-study__final-cta-inner {
+    max-width: var(--case-narrow-max);
+    margin-inline: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  .case-study__final-cta-eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .case-study__final-cta-heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 3.4vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .case-study__final-cta-sub {
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+    max-width: 56ch;
+    margin: 0;
+  }
+  .case-study__final-cta-buttons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-block-start: 16px; }
+  .case-study__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    padding: 16px 32px;
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+  }
+  .case-study__btn--primary {
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+  }
+  .case-study__btn--primary:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+  }
+  .case-study__btn--secondary {
+    background: var(--color-secondary-button-background);
+    color: var(--color-secondary-button-text);
+    border: 1.5px solid var(--color-secondary-button-border);
+  }
+  .case-study__btn--secondary:hover {
+    background: var(--color-secondary-button-hover-background);
+    color: var(--color-secondary-button-hover-text);
+  }
+
+  /* 9. Related case studies */
+  .case-study__related { padding-block: clamp(48px, 6vw, 80px); }
+  .case-study__related-inner { max-width: var(--case-page-max); margin-inline: auto; }
+  .case-study__related-heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: var(--color-foreground-heading);
+  }
+  .case-study__related-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media screen and (min-width: 750px) {
+    .case-study__related-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+  .case-study__related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    overflow: hidden;
+  }
+  .case-study__related-image { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+  .case-study__related-copy { padding: 24px 24px 28px; display: flex; flex-direction: column; gap: 6px; }
+  .case-study__related-eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .case-study__related-title {
+    font-family: var(--font-heading--family);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .case-study__related-firm {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Case Study Article",
+  "tag": "section",
+  "class": "trade-case-study-article-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "header", "content": "Featured products grid" },
+    { "type": "text", "id": "products_heading", "label": "Featured products heading", "default": "Featured in this project" },
+    { "type": "header", "content": "Final CTA" },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary CTA label", "default": "Join Trade Program" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary CTA link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA label", "default": "Request a Curated Collection" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary CTA link" },
+    { "type": "header", "content": "Section appearance" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}
