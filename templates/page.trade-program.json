@@ -206,6 +206,61 @@
         "color_scheme": "scheme-trade-cream"
       }
     },
+    "case-studies-grid": {
+      "type": "trade-case-studies-grid",
+      "blocks": {
+        "cs-hybrid": {
+          "type": "trade-case-study-card",
+          "settings": {
+            "tag": "Restaurant · Hospitality",
+            "firm": "Hybrid Creative",
+            "location": "Jupiter, FL",
+            "project_title": "NiMo Coastal Mediterranean",
+            "summary": "<p>Sourced 20+ unique prints to build a Mediterranean gallery wall that anchors the restaurant's elevated-yet-casual concept.</p>",
+            "quote": "<p>Artwork is the layer that makes it all feel complete.</p>",
+            "image": "shopify://shop_images/photo-1414235077428-338989a2e8c0.jpg",
+            "article_link": "/blogs/trade-case-studies/hybrid-creative-nimo",
+            "firm_link": "https://www.hybrid-creative.co/"
+          }
+        },
+        "cs-wolfgang": {
+          "type": "trade-case-study-card",
+          "settings": {
+            "tag": "STR · Vacation Rental",
+            "firm": "Wolfgang Pichler",
+            "location": "Joshua Tree & Palm Springs, CA",
+            "project_title": "Desert Vacation Homes",
+            "summary": "<p>Solved a desert-specific glare problem with Society6's wood panel art — non-reflective, photogenic, and on-budget for investor STR portfolios.</p>",
+            "quote": "<p>Society6 became my favorite source because the wooden panels don't reflect, are affordable, and perfect for vacation homes.</p>",
+            "image": "shopify://shop_images/photo-1487530811176-3780de880c2d.jpg",
+            "article_link": "/blogs/trade-case-studies/wolfgang-pichler-desert",
+            "firm_link": "https://www.wolfgangpichler.com/"
+          }
+        },
+        "cs-properfun": {
+          "type": "trade-case-study-card",
+          "settings": {
+            "tag": "Event Production",
+            "firm": "Proper Fun Events",
+            "location": "NYC",
+            "project_title": "Floral Explosion Brand Event",
+            "summary": "<p>Pulled distinctive coffee tables, side tables, and pillows for a vibrant floral-themed event — pieces guests loved so much they kept them as mementos.</p>",
+            "quote": "<p>Society6 became a one-stop-shop for accessories and everything we needed.</p>",
+            "image": "shopify://shop_images/photo-1490750967868-88aa4486c946.jpg",
+            "article_link": "/blogs/trade-case-studies/proper-fun-events-floral",
+            "firm_link": "https://jesgordon.com/"
+          }
+        }
+      },
+      "block_order": ["cs-hybrid", "cs-wolfgang", "cs-properfun"],
+      "settings": {
+        "eyebrow": "Case Studies",
+        "heading": "Real projects, real designers.",
+        "subhead": "<p>See how trade members across hospitality, residential, and events use Society6.</p>",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
     "explore": {
       "type": "trade-explore-blocks",
       "blocks": {
@@ -329,5 +384,5 @@
       }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "explore", "catalog-gate", "final-cta", "newsletter"]
+  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "case-studies-grid", "explore", "catalog-gate", "final-cta", "newsletter"]
 }

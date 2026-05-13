@@ -1,0 +1,197 @@
+{%- comment -%}
+  blocks/trade-case-study-card.liquid
+  Public block. Case study preview card with image, tag, firm/location
+  meta, project title, summary, optional pull-quote, and a
+  card-wide article link plus a small external "Visit firm →" link.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<article class="trade-cs-card" {{ block.shopify_attributes }}>
+  <a class="trade-cs-card__main-link" href="{{ s.article_link | default: '#' }}" aria-label="Read case study: {{ s.project_title | escape }}"></a>
+
+  {%- if s.image != blank -%}
+    <div class="trade-cs-card__media">
+      {{ s.image | image_url: width: 800 | image_tag:
+        widths: '400, 600, 800',
+        sizes: '(min-width: 750px) 33vw, 100vw',
+        alt: s.project_title,
+        loading: 'lazy',
+        class: 'trade-cs-card__image'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="trade-cs-card__copy">
+    {%- if s.tag != blank -%}
+      <p class="trade-cs-card__tag">{{ s.tag | escape }}</p>
+    {%- endif -%}
+
+    {%- if s.firm != blank or s.location != blank -%}
+      <p class="trade-cs-card__meta">
+        {%- if s.firm != blank -%}{{ s.firm | escape }}{%- endif -%}
+        {%- if s.firm != blank and s.location != blank -%} · {% endif -%}
+        {%- if s.location != blank -%}{{ s.location | escape }}{%- endif -%}
+      </p>
+    {%- endif -%}
+
+    {%- if s.project_title != blank -%}
+      <h3 class="trade-cs-card__title">{{ s.project_title | escape }}</h3>
+    {%- endif -%}
+
+    {%- if s.summary != blank -%}
+      <div class="trade-cs-card__summary">{{ s.summary }}</div>
+    {%- endif -%}
+
+    {%- if s.quote != blank -%}
+      <blockquote class="trade-cs-card__quote">{{ s.quote }}</blockquote>
+    {%- endif -%}
+
+    <div class="trade-cs-card__links">
+      {%- if s.article_link != blank -%}
+        <span class="trade-cs-card__read">Read case study →</span>
+      {%- endif -%}
+      {%- if s.firm_link != blank and s.firm != blank -%}
+        <a class="trade-cs-card__firm-link" href="{{ s.firm_link }}" target="_blank" rel="noopener">
+          Visit {{ s.firm | escape }} →
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>
+
+{% stylesheet %}
+  .trade-cs-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .trade-cs-card__main-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .trade-cs-card__main-link:hover ~ .trade-cs-card__copy .trade-cs-card__read {
+    text-decoration: underline;
+  }
+  .trade-cs-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .trade-cs-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .trade-cs-card__main-link:hover ~ .trade-cs-card__media .trade-cs-card__image,
+  .trade-cs-card:hover .trade-cs-card__image {
+    transform: scale(1.03);
+  }
+  .trade-cs-card__copy {
+    padding: 28px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .trade-cs-card__tag {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .trade-cs-card__meta {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .trade-cs-card__title {
+    font-family: var(--font-heading--family);
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--color-foreground-heading);
+    margin: 4px 0 4px 0;
+  }
+  .trade-cs-card__summary {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-foreground);
+  }
+  .trade-cs-card__summary :where(p) { margin: 0; }
+  .trade-cs-card__quote {
+    font-family: var(--font-heading--family);
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--color-foreground-heading);
+    margin: 8px 0 0 0;
+    padding-block-start: 12px;
+    border-block-start: 1px solid var(--color-border);
+    quotes: '\201C' '\201D';
+  }
+  .trade-cs-card__quote::before { content: open-quote; }
+  .trade-cs-card__quote::after { content: close-quote; }
+  .trade-cs-card__quote :where(p) { margin: 0; display: inline; }
+  .trade-cs-card__links {
+    margin-block-start: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .trade-cs-card__read {
+    font-family: var(--font-accent--family);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-heading);
+  }
+  .trade-cs-card__firm-link {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    color: var(--color-foreground-muted);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+  .trade-cs-card__firm-link:hover {
+    color: var(--color-foreground);
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Case Study Card",
+  "settings": [
+    { "type": "header", "content": "Tag and meta" },
+    { "type": "text", "id": "tag",      "label": "Tag (vertical)" },
+    { "type": "text", "id": "firm",     "label": "Firm name" },
+    { "type": "text", "id": "location", "label": "Location" },
+    { "type": "header", "content": "Project content" },
+    { "type": "text",      "id": "project_title", "label": "Project title" },
+    { "type": "richtext",  "id": "summary",       "label": "Summary" },
+    { "type": "richtext",  "id": "quote",         "label": "Pull quote (optional)" },
+    { "type": "image_picker", "id": "image",      "label": "Image" },
+    { "type": "header", "content": "Links" },
+    { "type": "url",  "id": "article_link", "label": "Article (internal) link" },
+    { "type": "url",  "id": "firm_link",    "label": "Firm website (external) link" }
+  ],
+  "presets": [
+    { "name": "Trade Case Study Card" }
+  ]
+}
+{% endschema %}
