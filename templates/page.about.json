@@ -1,0 +1,258 @@
+{
+  "sections": {
+    "hero": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/about01.jpg",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 20
+          },
+          "blocks": {
+            "headline": {
+              "type": "text",
+              "settings": {
+                "text": "<h1>Live Artfully</h1>",
+                "type_preset": "h1",
+                "alignment": "left",
+                "max_width": "narrow",
+                "font": "var(--font-heading--family)"
+              }
+            },
+            "lede": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Society6 is a curated art retailer that handpicks artists and designs across Wall Art, Home Decor, and lifestyle products — unlike open marketplaces with unlimited uploads. Every piece is made with intention, by artists and creators with distinct points of view. So your home doesn't just look good. It feels genuinely, unmistakably yours.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": ["headline", "lede"]
+        }
+      },
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "50svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "color_scheme": "scheme-trade-cream",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "made-by-hand": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/about02.jpg",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 20
+          },
+          "blocks": {
+            "heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Made for your space, by hand</h2>",
+                "type_preset": "h2",
+                "alignment": "left",
+                "max_width": "narrow",
+                "font": "var(--font-heading--family)"
+              }
+            },
+            "body": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Every Society6 piece is made to order. When you find a print, a duvet, or a mug you love, a real artist gets paid — and a real product gets made, just for you. No overstock warehouse. No anonymous catalog. Just art with a point of view, made by people who care that it lands in the right home.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": ["heading", "body"]
+        }
+      },
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "color_scheme": "scheme-trade-cream",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "pillars": {
+      "type": "value-pillars",
+      "blocks": {
+        "p1": { "type": "value-pillar", "settings": { "label": "Featured artists" } },
+        "p2": { "type": "value-pillar", "settings": { "label": "Editorial curation" } },
+        "p3": { "type": "value-pillar", "settings": { "label": "Made to order" } },
+        "p4": { "type": "value-pillar", "settings": { "label": "Made to live with" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
+    "home-like-you": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/about03.jpg",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 20
+          },
+          "blocks": {
+            "heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>A home that looks like you</h2>",
+                "type_preset": "h2",
+                "alignment": "left",
+                "max_width": "narrow",
+                "font": "var(--font-heading--family)"
+              }
+            },
+            "p1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>The home has become the primary canvas for personal identity. A gallery wall in a favorite reading corner. A duvet that carries the memory of a first apartment. A rug that's a focal point one moment, a yoga mat the next, a place to gather on a long summer night. Different homes, different lives, but a shared instinct — to make a space that reflects who you are.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "p2": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Society6 is where you find the art to sign it.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": ["heading", "p1", "p2"]
+        }
+      },
+      "settings": {
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "color_scheme": "scheme-trade-cream",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "faq": {
+      "type": "faq-list",
+      "blocks": {
+        "q1": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How is Society6 different from a marketplace?",
+            "answer": "<p>Society6 is a curated art retailer, not an open marketplace. Society6 handpicks artists and designs across Wall Art, Home Decor, and lifestyle products, rather than accepting unlimited uploads from anyone. The result is a smaller, more considered selection — closer to an editorial point of view than an algorithmic feed.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq-item",
+          "settings": {
+            "question": "How are artists selected?",
+            "answer": "<p>Society6 works with a curated roster of artists and creators with distinct points of view. Selection is editorial, not automated. The team looks for original work, a consistent voice, and pieces people actually want to live with — across painting, photography, illustration, collage, and pattern design. Artists are partners, not catalog entries.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Are Society6 products made to order?",
+            "answer": "<p>Yes. Every Society6 product is made to order. When you place an order, the piece is produced specifically for you — there's no overstock warehouse, no anonymous catalog of pre-made inventory. Production typically takes a few business days before shipping.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq-item",
+          "settings": {
+            "question": "What does Society6 sell?",
+            "answer": "<p>Society6 sells curated Wall Art, Home Decor, and lifestyle products designed by independent artists. Wall Art includes Art Prints, Framed Art Prints, Canvas Prints, and Wood Wall Art. Home Decor includes bedding, throw pillows, rugs, shower curtains, and kitchen and dining pieces. Lifestyle products include iPhone cases, tote bags, notebooks, and accessories.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Where is the art produced?",
+            "answer": "<p>Every Society6 product is printed in the United States. Society6 is based in Englewood, Colorado, and works with artists and creators around the world — but each piece is produced domestically, made to order after you place it. That means shorter supply chains, closer quality control, and a print run of one: yours.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq-item",
+          "settings": {
+            "question": "What does \"Live Artfully\" mean?",
+            "answer": "<p>Live Artfully is the Society6 tagline. It reflects the idea that the home has become the primary canvas for personal identity — and art is how you sign it. A space lived in artfully isn't decorated to match a trend. It's built piece by piece, with intention, to feel genuinely, unmistakably like the person who lives there.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"],
+      "settings": {
+        "heading": "Common questions",
+        "subhead": "<p>Quick answers about how Society6 works.</p>",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
+    "trade-crosslink": {
+      "type": "text-callout",
+      "settings": {
+        "copy": "<p><strong>Working on a project?</strong> Society6 has a Trade Program for designers, architects, hospitality firms, and event producers — 30% off, curation support, U.S. production.</p>",
+        "button_label": "Apply to the Trade Program",
+        "button_link": "/pages/trade-program",
+        "alignment": "center",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    }
+  },
+  "order": ["hero", "made-by-hand", "pillars", "home-like-you", "faq", "trade-crosslink"]
+}
