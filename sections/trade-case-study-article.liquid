@@ -277,8 +277,14 @@
     width: 100%;
     height: auto;
     aspect-ratio: 5 / 4;
+    max-height: 35vh;
     object-fit: cover;
     display: block;
+  }
+  @media screen and (min-width: 750px) {
+    .case-study__hero-image {
+      max-height: 50vh;
+    }
   }
 
   /* 2. Quick facts */
