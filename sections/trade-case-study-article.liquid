@@ -7,9 +7,10 @@
 
   Composition (top → bottom):
     1. Hero: vertical eyebrow, H1 title, firm/location meta, image
-    2. Quick facts row (4 columns: Firm / Vertical / Location / Featured Products count)
-    3. Article body (article.content)
-    4. Featured pull-quote
+    2. Featured pull-quote (promoted from old position 4 — prominent
+       full-page-width Playfair Display, generous vertical padding)
+    3. Quick facts row (4 columns: Firm / Vertical / Location / Featured Products count)
+    4. Article body (article.content)
     5. Featured products grid (skipped if metafield empty)
     6. Additional quotes (quote_2 + quote_3) side-by-side
     7. Visit firm CTA (external link, _blank)
@@ -61,7 +62,23 @@
     {%- endif -%}
   </header>
 
-  {%- comment -%} 2. Quick facts row {%- endcomment -%}
+  {%- comment -%} 2. Featured pull-quote (promoted — prominent treatment) {%- endcomment -%}
+  {%- if featured_quote != blank -%}
+    <section class="case-study__pullquote case-study__pullquote--hero">
+      <figure class="case-study__pullquote-inner">
+        <blockquote class="case-study__pullquote-text">{{ featured_quote | newline_to_br }}</blockquote>
+        {%- if principal != blank or firm != blank -%}
+          <figcaption class="case-study__pullquote-attrib">
+            {%- if principal != blank -%}{{ principal | escape }}{%- endif -%}
+            {%- if principal != blank and firm != blank -%} · {% endif -%}
+            {%- if firm != blank -%}<span class="case-study__pullquote-firm">{{ firm | escape }}</span>{%- endif -%}
+          </figcaption>
+        {%- endif -%}
+      </figure>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} 3. Quick facts row {%- endcomment -%}
   <section class="case-study__facts">
     <div class="case-study__facts-grid">
       <div class="case-study__fact">
@@ -83,28 +100,12 @@
     </div>
   </section>
 
-  {%- comment -%} 3. Article body {%- endcomment -%}
+  {%- comment -%} 4. Article body {%- endcomment -%}
   <section class="case-study__body">
     <div class="case-study__body-inner rte">
       {{ article.content }}
     </div>
   </section>
-
-  {%- comment -%} 4. Featured pull-quote {%- endcomment -%}
-  {%- if featured_quote != blank -%}
-    <section class="case-study__pullquote">
-      <figure class="case-study__pullquote-inner">
-        <blockquote class="case-study__pullquote-text">{{ featured_quote | newline_to_br }}</blockquote>
-        {%- if principal != blank or firm != blank -%}
-          <figcaption class="case-study__pullquote-attrib">
-            {%- if principal != blank -%}{{ principal | escape }}{%- endif -%}
-            {%- if principal != blank and firm != blank -%} · {% endif -%}
-            {%- if firm != blank -%}<span class="case-study__pullquote-firm">{{ firm | escape }}</span>{%- endif -%}
-          </figcaption>
-        {%- endif -%}
-      </figure>
-    </section>
-  {%- endif -%}
 
   {%- comment -%} 5. Featured products grid (only if metafield non-empty) {%- endcomment -%}
   {%- if fp_count > 0 -%}
@@ -342,7 +343,7 @@
   .case-study__body-inner :where(p:first-child) { margin-top: 0; }
   .case-study__body-inner :where(p:last-child) { margin-bottom: 0; }
 
-  /* 4. Pull quote */
+  /* Pull quote (used in promoted hero position + as base style) */
   .case-study__pullquote { padding-block: clamp(56px, 7vw, 96px); }
   .case-study__pullquote-inner {
     max-width: var(--case-narrow-max);
@@ -358,6 +359,18 @@
     color: var(--color-foreground-heading);
     margin: 0 0 24px 0;
     quotes: '\201C' '\201D';
+  }
+  /* Promoted variant — sits right under the hero, larger, more breathing room */
+  .case-study__pullquote--hero {
+    padding-block: clamp(72px, 9vw, 120px);
+  }
+  .case-study__pullquote--hero .case-study__pullquote-inner {
+    max-width: var(--case-page-max);
+  }
+  .case-study__pullquote--hero .case-study__pullquote-text {
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.2;
+    margin-block-end: 32px;
   }
   .case-study__pullquote-text::before { content: open-quote; }
   .case-study__pullquote-text::after { content: close-quote; }
