@@ -1,0 +1,101 @@
+{%- comment -%}
+  blocks/faq-item.liquid
+  Public block. One Q+A row in an FAQ accordion. Uses native
+  <details>/<summary> for accessibility (keyboard, screen reader,
+  no-JS users all get a working disclosure widget).
+
+  IMPORTANT: the parent section (sections/faq-list.liquid) iterates
+  over section.blocks to emit a Schema.org FAQPage JSON-LD <script>.
+  Don't change the (namespace, key, type) of the question/answer
+  settings here without updating that schema build too.
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<details class="faq-item" {{ block.shopify_attributes }}>
+  <summary class="faq-item__summary">
+    <span class="faq-item__q">{{ s.question | escape }}</span>
+    <span class="faq-item__sign" aria-hidden="true"></span>
+  </summary>
+  {%- if s.answer != blank -%}
+    <div class="faq-item__a">{{ s.answer }}</div>
+  {%- endif -%}
+</details>
+
+{% stylesheet %}
+  .faq-item {
+    border-block-end: 1px solid var(--color-border);
+  }
+  .faq-item:first-of-type {
+    border-block-start: 1px solid var(--color-border);
+  }
+  .faq-item__summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 24px 16px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .faq-item__summary::-webkit-details-marker { display: none; }
+  .faq-item__q {
+    font-family: var(--font-heading--family);
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-foreground-heading);
+    flex: 1;
+    min-width: 0;
+  }
+  .faq-item__sign {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .faq-item__sign::before,
+  .faq-item__sign::after {
+    content: '';
+    position: absolute;
+    background: var(--color-foreground);
+    inset: 50% 0 auto 0;
+    height: 1.5px;
+    transform: translateY(-50%);
+  }
+  .faq-item__sign::after {
+    transform: translateY(-50%) rotate(90deg);
+    transition: opacity 0.2s ease;
+  }
+  .faq-item[open] .faq-item__sign::after {
+    opacity: 0;
+  }
+  .faq-item__a {
+    padding: 0 16px 28px 0;
+    max-width: 640px;
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+  }
+  .faq-item__a :where(p) { margin: 0 0 0.85em 0; }
+  .faq-item__a :where(p:last-child) { margin-bottom: 0; }
+  .faq-item__a :where(a) {
+    color: var(--color-foreground);
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Item",
+  "settings": [
+    { "type": "text",     "id": "question", "label": "Question" },
+    { "type": "richtext", "id": "answer",   "label": "Answer" }
+  ],
+  "presets": [
+    { "name": "FAQ Item" }
+  ]
+}
+{% endschema %}

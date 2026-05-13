@@ -1,0 +1,124 @@
+{%- comment -%}
+  sections/faq-list.liquid
+  FAQ accordion section. Renders a section header (heading + subhead)
+  over a stack of faq-item blocks. Each faq-item is a native
+  <details>/<summary> disclosure.
+
+  CRITICAL — AEO requirement: emits a Schema.org FAQPage JSON-LD
+  <script> after the visual list, iterating section.blocks to build
+  the structured schema dynamically. AI models and search engines
+  extract FAQ data directly from this markup, so the visual answers
+  and the schema answers must come from the same source of truth
+  (block.settings.answer, stripped of HTML for the schema text).
+
+  We use the `json` filter for value escaping (handles quotes,
+  backslashes, newlines correctly per RFC 8259).
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="faq-list section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div class="faq-list__inner">
+    {%- if section.settings.heading != blank or section.settings.subhead != blank -%}
+      <div class="faq-list__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="faq-list__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subhead != blank -%}
+          <div class="faq-list__subhead">{{ section.settings.subhead }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="faq-list__items">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Schema.org FAQPage JSON-LD — AEO markup {%- endcomment -%}
+{%- assign faq_blocks = section.blocks | where: 'type', 'faq-item' -%}
+{%- if faq_blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for b in faq_blocks -%}
+          {
+            "@type": "Question",
+            "name": {{ b.settings.question | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ b.settings.answer | strip_html | strip_newlines | json }}
+            }
+          }{%- unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .faq-list {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .faq-list__inner {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+  .faq-list__header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-list__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 3.4vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-foreground-heading);
+    margin: 0;
+  }
+  .faq-list__subhead {
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+  }
+  .faq-list__subhead :where(p) { margin: 0; }
+  .faq-list__items {
+    display: flex;
+    flex-direction: column;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ List",
+  "tag": "section",
+  "class": "faq-list-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "blocks": [ { "type": "faq-item" } ],
+  "max_blocks": 10,
+  "settings": [
+    { "type": "header", "content": "Section header" },
+    { "type": "text",     "id": "heading", "label": "Heading", "default": "Common questions" },
+    { "type": "richtext", "id": "subhead", "label": "Subhead" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}
