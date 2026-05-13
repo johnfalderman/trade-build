@@ -1,0 +1,128 @@
+{%- comment -%}
+  sections/text-callout.liquid
+  Generic thin callout — copy + single button + alignment. Used on
+  the About page to cross-link to /pages/trade-program but reusable
+  anywhere. Single-row layout, bordered box treatment for a quiet
+  but discoverable visual presence.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="text-callout section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div class="text-callout__inner text-callout__inner--{{ section.settings.alignment }}">
+    {%- if section.settings.copy != blank -%}
+      <div class="text-callout__copy">{{ section.settings.copy }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a class="text-callout__btn" href="{{ section.settings.button_link }}">
+        {{- section.settings.button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .text-callout {
+    padding-block: clamp(48px, 6vw, 64px);
+  }
+  .text-callout__inner {
+    max-width: 960px;
+    margin-inline: auto;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    padding: clamp(24px, 3vw, 36px) clamp(24px, 4vw, 48px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .text-callout__inner--center {
+    align-items: center;
+    text-align: center;
+  }
+  .text-callout__inner--right {
+    align-items: flex-end;
+    text-align: right;
+  }
+  @media screen and (min-width: 750px) {
+    .text-callout__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+      justify-content: space-between;
+    }
+    .text-callout__inner--center {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+  .text-callout__copy {
+    font-family: var(--font-body--family);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-foreground);
+    flex: 1;
+  }
+  .text-callout__copy :where(p) { margin: 0; }
+  .text-callout__copy :where(strong) { color: var(--color-foreground-heading); }
+  .text-callout__btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+    border-radius: 0;
+    padding: 14px 28px;
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .text-callout__btn:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+    border-color: var(--color-primary-button-hover-border);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Text Callout",
+  "tag": "section",
+  "class": "text-callout-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "richtext", "id": "copy", "label": "Copy" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url",  "id": "button_link",  "label": "Button link" },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}
