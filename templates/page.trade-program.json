@@ -78,8 +78,8 @@
         "section_width": "page-width",
         "extend_media": false,
         "color_scheme": "scheme-trade-cream",
-        "padding-block-start": 60,
-        "padding-block-end": 60
+        "padding-block-start": 44,
+        "padding-block-end": 44
       }
     },
     "two-path": {
