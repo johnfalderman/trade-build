@@ -24,7 +24,7 @@
             "headline": {
               "type": "text",
               "settings": {
-                "text": "<h1>Live Artfully</h1>",
+                "text": "<h1>About Society6</h1>",
                 "type_preset": "h1",
                 "alignment": "left",
                 "max_width": "narrow",
@@ -34,7 +34,7 @@
             "lede": {
               "type": "text",
               "settings": {
-                "text": "<p>Society6 is a curated art retailer that handpicks artists and designs across Wall Art, Home Decor, and lifestyle products — unlike open marketplaces with unlimited uploads. Every piece is made with intention, by artists and creators with distinct points of view. So your home doesn't just look good. It feels genuinely, unmistakably yours.</p>",
+                "text": "<p>Make your space feel like you.</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
@@ -76,27 +76,35 @@
             "gap": 20
           },
           "blocks": {
-            "heading": {
+            "p1": {
               "type": "text",
               "settings": {
-                "text": "<h2>Made for your space, by hand</h2>",
-                "type_preset": "h2",
+                "text": "<p>Your home is the most personal space you have. It should say something true about who you are.</p>",
+                "type_preset": "rte",
                 "alignment": "left",
-                "max_width": "narrow",
-                "font": "var(--font-heading--family)"
+                "max_width": "normal"
               }
             },
-            "body": {
+            "p2": {
               "type": "text",
               "settings": {
-                "text": "<p>Every Society6 piece is made to order. When you find a print, a duvet, or a mug you love, a real artist gets paid — and a real product gets made, just for you. No overstock warehouse. No anonymous catalog. Just art with a point of view, made by people who care that it lands in the right home.</p>",
+                "text": "<p>Society6 is where you find the art that makes that happen. We design pieces that don't just decorate a room but bring it to life. We also believe art isn't something you save for special occasions or hang and forget, it's something you live with: in the quiet mornings, the messy moments, and all the in-between parts of your day.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "p3": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We're here for that version of home decor — one that's personal, expressive, a little imperfect, and completely yours. Because when your space truly feels like you, everything else does, too.</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
               }
             }
           },
-          "block_order": ["heading", "body"]
+          "block_order": ["p1", "p2", "p3"]
         }
       },
       "settings": {
@@ -108,20 +116,6 @@
         "color_scheme": "scheme-trade-cream",
         "padding-block-start": 80,
         "padding-block-end": 80
-      }
-    },
-    "pillars": {
-      "type": "value-pillars",
-      "blocks": {
-        "p1": { "type": "value-pillar", "settings": { "label": "Featured artists" } },
-        "p2": { "type": "value-pillar", "settings": { "label": "Editorial curation" } },
-        "p3": { "type": "value-pillar", "settings": { "label": "Made to order" } },
-        "p4": { "type": "value-pillar", "settings": { "label": "Made to live with" } }
-      },
-      "block_order": ["p1", "p2", "p3", "p4"],
-      "settings": {
-        "section_width": "page-width",
-        "color_scheme": "scheme-trade-cream"
       }
     },
     "home-like-you": {
@@ -148,7 +142,7 @@
             "heading": {
               "type": "text",
               "settings": {
-                "text": "<h2>A home that looks like you</h2>",
+                "text": "<h2>Art, made for real life.</h2>",
                 "type_preset": "h2",
                 "alignment": "left",
                 "max_width": "narrow",
@@ -158,7 +152,7 @@
             "p1": {
               "type": "text",
               "settings": {
-                "text": "<p>The home has become the primary canvas for personal identity. A gallery wall in a favorite reading corner. A duvet that carries the memory of a first apartment. A rug that's a focal point one moment, a yoga mat the next, a place to gather on a long summer night. Different homes, different lives, but a shared instinct — to make a space that reflects who you are.</p>",
+                "text": "<p>We partner with independent artists around the world to bring original artwork into everyday spaces — on wall art, home decor, and objects you actually use. Everything is made to order, so what you choose is created specially for your space. It's art that lives on your walls, your bed, your table, and every other place that feels like home.</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
@@ -167,14 +161,32 @@
             "p2": {
               "type": "text",
               "settings": {
-                "text": "<p>Society6 is where you find the art to sign it.</p>",
+                "text": "<p>Every piece on Society6 starts with an artist: someone with a distinct point of view, practice, and story. We champion a wide array of artistic expressions, curating diverse styles and perspectives — and we love providing space for artists to freely explore and share their creative visions. You can learn more about our artists <a href=\"/\">here</a><!-- TODO: link to dedicated artists page when one exists -->.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "p3": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We don't believe in rules for the \"perfect home.\" We believe in helping you discover what feels right.</p>",
+                "type_preset": "rte",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "p4": {
+              "type": "text",
+              "settings": {
+                "text": "<p>That means:</p>",
                 "type_preset": "rte",
                 "alignment": "left",
                 "max_width": "normal"
               }
             }
           },
-          "block_order": ["heading", "p1", "p2"]
+          "block_order": ["heading", "p1", "p2", "p3", "p4"]
         }
       },
       "settings": {
@@ -186,6 +198,24 @@
         "color_scheme": "scheme-trade-cream",
         "padding-block-start": 80,
         "padding-block-end": 80
+      }
+    },
+    "pillars": {
+      "type": "text-callout",
+      "settings": {
+        "copy": "<ul><li>Curating by <em>mood</em>, not just category</li><li>Showing <em>art in real, lived-in spaces</em></li><li>Making <em>discovery</em> feel intuitive, not intimidating</li></ul>",
+        "alignment": "left",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
+    "closing": {
+      "type": "text-callout",
+      "settings": {
+        "copy": "<p>So you can trust your taste — and build a space that evolves with you.</p><p>Live artfully.</p>",
+        "alignment": "center",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
       }
     },
     "faq": {
@@ -254,5 +284,5 @@
       }
     }
   },
-  "order": ["hero", "made-by-hand", "pillars", "home-like-you", "faq", "trade-crosslink"]
+  "order": ["hero", "made-by-hand", "home-like-you", "pillars", "closing", "faq", "trade-crosslink"]
 }
