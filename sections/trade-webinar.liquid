@@ -77,14 +77,13 @@
     </div>
 
     <div class="s6trade-webinar__media">
-      {%- if section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 1200 | image_tag:
-          widths: '400, 600, 800, 1200',
-          sizes: '(min-width: 750px) 45vw, 90vw',
-          alt: section.settings.image_alt | default: section.settings.heading,
-          loading: 'lazy',
-          class: 's6trade-webinar__image'
-        }}
+      {%- if section.settings.image_filename != blank -%}
+        <img
+          src="{{ section.settings.image_filename | file_url }}"
+          alt="{{ section.settings.image_alt | default: section.settings.heading | escape }}"
+          class="s6trade-webinar__image"
+          loading="lazy"
+        >
       {%- endif -%}
     </div>
   </div>
@@ -256,7 +255,7 @@
     { "type": "text", "id": "success_link_label", "label": "Success link label", "default": "Watch the session →" },
     { "type": "text", "id": "webinar_url", "label": "Webinar URL", "default": "https://my.demio.com/ref/NYp9TerTRo0euV2d" },
     { "type": "header", "content": "Media" },
-    { "type": "image_picker", "id": "image", "label": "Image (4:5)" },
+    { "type": "text", "id": "image_filename", "label": "Image filename (in Shopify Files)", "info": "Filename only, e.g. trade-webinar-title-card.svg. Lets us serve SVGs that the image picker rejects." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "header", "content": "Section appearance" },
     {

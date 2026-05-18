@@ -321,7 +321,7 @@
         "success_text": "You're in. Watch the session whenever you're ready.",
         "success_link_label": "Watch the session →",
         "webinar_url": "https://my.demio.com/ref/NYp9TerTRo0euV2d",
-        "image": "shopify://files/trade-webinar-title-card.svg",
+        "image_filename": "trade-webinar-title-card.svg",
         "image_alt": "Society6 Trade and DesignSpec on-demand webinar: A Refined Workflow for Art Sourcing.",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
