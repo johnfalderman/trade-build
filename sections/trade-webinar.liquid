@@ -1,0 +1,275 @@
+{%- comment -%}
+  sections/trade-webinar.liquid
+  Replaces the inline Free Download / catalog gate block. Same
+  two-column layout (copy + email form on the left, image on the
+  right) but for the DesignSpec on-demand webinar. Email-only form
+  (mirrors the block it replaces — phone field lives in the lookbook
+  modal). On submit the customer record is tagged trade-webinar-lead
+  and the success state surfaces a link to the Demio session.
+
+  Production gap: lead destination is Shopify customer records.
+  Production likely routes to Salesforce/Klaviyo. The Demio link in
+  the success state means there's a double-capture (Shopify lead +
+  Demio registration) — acceptable for the prototype.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="s6trade-webinar section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+>
+  <div class="s6trade-webinar__grid">
+    <div class="s6trade-webinar__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="s6trade-webinar__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="s6trade-webinar__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="s6trade-webinar__body">{{ section.settings.description }}</div>
+      {%- endif -%}
+
+      {%- form 'customer', class: 's6trade-webinar__form' -%}
+        <input type="hidden" name="contact[tags]" value="trade-webinar-lead">
+
+        {%- if form.posted_successfully? -%}
+          <div class="s6trade-webinar__success">
+            <p class="s6trade-webinar__success-text">{{ section.settings.success_text | escape }}</p>
+            {%- if section.settings.webinar_url != blank -%}
+              <a
+                class="s6trade-webinar__success-link"
+                href="{{ section.settings.webinar_url }}"
+                target="_blank"
+                rel="noopener"
+              >
+                {{- section.settings.success_link_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <label class="s6trade-webinar__field">
+            <span class="s6trade-webinar__label">{{ section.settings.field_label | escape }}</span>
+            <input
+              type="email"
+              name="contact[email]"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              required
+            >
+          </label>
+
+          {%- if form.errors -%}
+            <div class="s6trade-webinar__error" role="alert">
+              {{- form.errors | default_errors -}}
+            </div>
+          {%- endif -%}
+
+          <button type="submit" class="s6trade-webinar__submit">
+            {{ section.settings.submit_label | escape }}
+          </button>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- if section.settings.fineprint != blank -%}
+        <p class="s6trade-webinar__fineprint">{{ section.settings.fineprint | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="s6trade-webinar__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag:
+          widths: '400, 600, 800, 1200',
+          sizes: '(min-width: 750px) 45vw, 90vw',
+          alt: section.settings.image_alt | default: section.settings.heading,
+          loading: 'lazy',
+          class: 's6trade-webinar__image'
+        }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .s6trade-webinar {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .s6trade-webinar__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-webinar__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 64px;
+    }
+  }
+  .s6trade-webinar__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .s6trade-webinar__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .s6trade-webinar__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 3.4vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-webinar__body {
+    font-family: var(--font-body--family);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+  }
+  .s6trade-webinar__body :where(p) { margin: 0; }
+  .s6trade-webinar__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-block-start: 16px;
+    max-width: 480px;
+  }
+  .s6trade-webinar__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .s6trade-webinar__label {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+  .s6trade-webinar__field input {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--color-foreground);
+  }
+  .s6trade-webinar__field input:focus {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: -2px;
+  }
+  .s6trade-webinar__submit {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+    border-radius: 0;
+    padding: 14px 28px;
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    margin-block-start: 4px;
+  }
+  .s6trade-webinar__submit:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+    border-color: var(--color-primary-button-hover-border);
+  }
+  .s6trade-webinar__error {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: #a33;
+    line-height: 1.4;
+  }
+  .s6trade-webinar__success {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .s6trade-webinar__success-text {
+    font-family: var(--font-body--family);
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .s6trade-webinar__success-link {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-webinar__fineprint {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-foreground-muted);
+    max-width: 480px;
+    margin: 8px 0 0 0;
+  }
+  .s6trade-webinar__media { order: -1; }
+  @media screen and (min-width: 750px) {
+    .s6trade-webinar__media { order: 0; }
+  }
+  .s6trade-webinar__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Webinar",
+  "tag": "section",
+  "class": "s6trade-webinar-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "On-Demand Webinar" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Watch: A Refined Workflow for Art Sourcing." },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>An on-demand session with DesignSpec on building a calmer, clearer way to source art for a project — from the first client brief to the final install.</p>" },
+    { "type": "header", "content": "Form" },
+    { "type": "text", "id": "field_label", "label": "Email field label", "default": "Email address" },
+    { "type": "text", "id": "submit_label", "label": "Submit button", "default": "Watch the Session" },
+    { "type": "text", "id": "fineprint", "label": "Fineprint", "default": "By signing up, you agree to receive trade emails from Society6. Unsubscribe anytime." },
+    { "type": "header", "content": "Success state" },
+    { "type": "text", "id": "success_text", "label": "Success text", "default": "You're in. Watch the session whenever you're ready." },
+    { "type": "text", "id": "success_link_label", "label": "Success link label", "default": "Watch the session →" },
+    { "type": "url", "id": "webinar_url", "label": "Webinar URL", "default": "https://my.demio.com/ref/NYp9TerTRo0euV2d" },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image (4:5)" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}
