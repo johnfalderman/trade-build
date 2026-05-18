@@ -62,8 +62,8 @@
             "button_secondary": {
               "type": "button",
               "settings": {
-                "label": "Learn More",
-                "link": "#",
+                "label": "Download 2026 Trade Lookbook",
+                "link": "#trade-lookbook",
                 "style_class": "button-secondary"
               }
             }
@@ -101,8 +101,8 @@
             "tag": "Full-Service",
             "heading": "We do the sourcing for you.",
             "body": "<p>Share your mood board and project brief. Our curation team does the sourcing, recommends framing and sizing, and delivers a custom collection for your review. You approve, we produce.</p>",
-            "button_label": "Request a Curated Collection",
-            "button_link": "#"
+            "button_label": "Download 2026 Trade Lookbook",
+            "button_link": "#trade-lookbook"
           }
         }
       },
@@ -296,7 +296,7 @@
           "settings": {
             "title": "Trade Catalog",
             "subtitle": "Download the PDF lookbook",
-            "link": "#catalog",
+            "link": "#trade-lookbook",
             "image": "shopify://shop_images/photo-1505691938895-1758d7feb511.jpg"
           }
         }
@@ -309,42 +309,27 @@
         "color_scheme": "scheme-trade-cream"
       }
     },
-    "catalog-gate": {
-      "type": "trade-catalog-gate",
-      "blocks": {
-        "catalog-signup": {
-          "type": "email-signup",
-          "static": true,
-          "settings": {
-            "heading": "",
-            "heading_preset": "h3",
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border_style": "all",
-            "border_width": 1,
-            "border_radius": 0,
-            "integrated_button": false,
-            "display_type": "text",
-            "label": "Send Me the Catalog",
-            "input_type_preset": "paragraph",
-            "button_type_preset": "paragraph",
-            "style_class": "button",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          }
-        }
-      },
+    "webinar": {
+      "type": "trade-webinar",
       "settings": {
-        "eyebrow": "Free Download",
-        "heading": "Get the 2026 Trade Catalog.",
-        "subhead": "<p>A curated lookbook of our most-requested artists, framing options, and project-ready collections — sized for hospitality, residential, and commercial spaces.</p>",
-        "fineprint": "By requesting the catalog, you agree to receive trade emails from Society6. Unsubscribe anytime.",
-        "cover_image": "shopify://shop_images/photo-1503602642458-232111445657.jpg",
+        "eyebrow": "On-Demand Webinar",
+        "heading": "Watch: A Refined Workflow for Art Sourcing.",
+        "description": "<p>An on-demand session with DesignSpec on building a calmer, clearer way to source art for a project — from the first client brief to the final install.</p>",
+        "field_label": "Email address",
+        "submit_label": "Watch the Session",
+        "fineprint": "By signing up, you agree to receive trade emails from Society6. Unsubscribe anytime.",
+        "success_text": "You're in. Watch the session whenever you're ready.",
+        "success_link_label": "Watch the session →",
+        "webinar_url": "https://my.demio.com/ref/NYp9TerTRo0euV2d",
+        "image": "shopify://shop_images/photo-1503602642458-232111445657.jpg",
+        "image_alt": "A designer's working table with framed art prints, framing-corner samples, and a laptop open to a mood board",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
+    },
+    "lookbook-modal": {
+      "type": "trade-lookbook-modal",
+      "settings": {}
     },
     "final-cta": {
       "type": "trade-final-cta",
@@ -354,8 +339,8 @@
         "subhead": "<p>Quick approval, no minimums, and your 30% discount goes live immediately. Or skip ahead and brief our curation team on your next project.</p>",
         "primary_label": "Join Trade Program",
         "primary_link": "shopify://pages/trade-application",
-        "secondary_label": "Request a Curated Collection",
-        "secondary_link": "#",
+        "secondary_label": "Download 2026 Trade Lookbook",
+        "secondary_link": "#trade-lookbook",
         "section_width": "full-width",
         "color_scheme": "scheme-trade-cream"
       }
@@ -393,5 +378,5 @@
       }
     }
   },
-  "order": ["main", "two-path", "benefits", "how-it-works", "social-proof", "clients", "case-studies-grid", "explore", "catalog-gate", "final-cta", "newsletter"]
+  "order": ["main", "two-path", "benefits", "social-proof", "clients", "case-studies-grid", "how-it-works", "explore", "webinar", "final-cta", "newsletter", "lookbook-modal"]
 }
