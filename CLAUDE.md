@@ -53,8 +53,7 @@ and "Horizon" are unpublished.
 - Save a local snapshot of any theme file changed via API into this repo at its
   canonical path (e.g. `templates/page.about.json`), and commit it, so git
   mirrors what's live.
-- This repo has no post-commit auto-push hook. After committing, push manually
-  with `git push`.
+- This repo has a post-commit auto-push hook; commits push to GitHub automatically.
 - One commit per logical change, with a clear message.
 - Don't expand scope silently mid-session. If work needs something outside this
   repo, name it and confirm before proceeding.
