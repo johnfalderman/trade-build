@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ============================================================
+     ENRICHED PRODUCT DETAIL PAGE — PROTOTYPE
+     Product: Cat Landscape 154 Framed Canvas Print / ilovedoodle
+     Society6 Sandbox Project — Path B standalone HTML artifact
+
+     PORTABILITY MODEL (dev Principle 2):
+     - All CSS classes prefixed .s6cw-  (cowork enrichment namespace)
+     - The DATA OBJECT below is the production-port spec. In
+       production, build it server-side from the product + its
+       Cowork metafields. The render logic stays the same.
+     - Graceful degradation: every enrichment block checks for its
+       data and hides cleanly if absent (dev Principle 1 + 6).
+     ============================================================ -->
+
+<!-- PAGE META — descriptive, not templated (Vision Principle 3: SEO)
+     PRODUCTION NOTE: generate from product data, not the
+     catalog-wide canvas-print boilerplate. -->
+<title>Cat Landscape 154 Framed Canvas Print by ilovedoodle | Society6</title>
+<meta name="description" content="A minimalist line-art cat beneath an orange sun, by ilovedoodle. Framed canvas print in warm terracotta and black. Mid-century modern wall art, made to live with.">
+
+<!-- JSON-LD STRUCTURED DATA (Vision Principles 3 + 4)
+     Machine-readable backbone for Google rich results + AI answer
+     engines. CONSISTENCY RULE: every additionalProperty value here
+     is ALSO visible on the page. Suppressed tags appear in neither.
+     PRODUCTION NOTE: render this server-side. The script below is
+     also written into the DOM by JS from the data object, so the
+     two never drift — see buildSchema(). This static copy is for
+     crawlers that read raw HTML. -->
+<script type="application/ld+json" id="s6cw-schema-static">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Cat Landscape 154 Framed Canvas Print",
+  "image": "https://society6.com/cdn/shop/files/ilovedoodle-cat-landscape-154-framed-art-canvas-black-front.jpg",
+  "description": "A minimalist line-art illustration of a stylized cat beneath an orange sun with geometric arch patterns in warm, monochromatic tones.",
+  "brand": { "@type": "Brand", "name": "Society6" },
+  "category": "Canvas Prints",
+  "creator": { "@type": "Person", "name": "ilovedoodle" },
+  "offers": {
+    "@type": "Offer",
+    "price": "125.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://society6.com/products/cat-landscape-154_framed-canvas-print"
+  },
+  "additionalProperty": [
+    { "@type": "PropertyValue", "name": "Style", "value": "Line Art" },
+    { "@type": "PropertyValue", "name": "Style", "value": "Minimalist" },
+    { "@type": "PropertyValue", "name": "Style", "value": "Hand-Drawn" },
+    { "@type": "PropertyValue", "name": "Mood", "value": "Whimsical" },
+    { "@type": "PropertyValue", "name": "Mood", "value": "Serene" },
+    { "@type": "PropertyValue", "name": "Subject", "value": "Cat" },
+    { "@type": "PropertyValue", "name": "Subject", "value": "Geometric" },
+    { "@type": "PropertyValue", "name": "Subject", "value": "Mid-Century Modern" },
+    { "@type": "PropertyValue", "name": "Palette", "value": "Orange" },
+    { "@type": "PropertyValue", "name": "Palette", "value": "Terracotta" },
+    { "@type": "PropertyValue", "name": "Palette", "value": "Black" },
+    { "@type": "PropertyValue", "name": "Palette", "value": "White" }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   DESIGN TOKENS — refined retail minimalism.
+   PRODUCTION NOTE: on the production port these map to the
+   Society6 | Production design system. Kept as variables so the
+   reskin is a token swap, not a find-and-replace.
+   ============================================================ */
+:root {
+  --s6cw-ink: #1a1a1a;
+  --s6cw-ink-soft: #555150;
+  --s6cw-ink-faint: #8c8784;
+  --s6cw-paper: #ffffff;
+  --s6cw-paper-warm: #f7f4f0;
+  --s6cw-line: #e6e1da;
+  --s6cw-accent: #c8612e;        /* terracotta — drawn from artwork palette */
+  --s6cw-accent-soft: #f0e3d8;
+  --s6cw-radius: 10px;
+  --s6cw-maxw: 1180px;
+  --s6cw-serif: 'Georgia', 'Times New Roman', serif;
+  --s6cw-sans: 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--s6cw-sans);
+  color: var(--s6cw-ink);
+  background: var(--s6cw-paper);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+/* ---- thin top utility bar, stands in for the site chrome ---- */
+.s6cw-chrome {
+  border-bottom: 1px solid var(--s6cw-line);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s6cw-ink-faint);
+  text-align: center;
+  padding: 10px 16px;
+}
+.s6cw-chrome strong { color: var(--s6cw-ink); font-weight: 600; }
+
+/* ---- breadcrumb ---- */
+.s6cw-wrap { max-width: var(--s6cw-maxw); margin: 0 auto; padding: 0 16px; }
+.s6cw-crumb {
+  font-size: 12px;
+  color: var(--s6cw-ink-faint);
+  padding: 14px 0;
+  letter-spacing: 0.03em;
+}
+.s6cw-crumb a { text-decoration: none; }
+.s6cw-crumb a:hover { color: var(--s6cw-accent); }
+.s6cw-crumb span { margin: 0 6px; }
+
+/* ============================================================
+   PRODUCT LAYOUT — single column on mobile (default),
+   two column from 860px up. Mobile-first (both Principle docs).
+   ============================================================ */
+.s6cw-product { display: block; padding-bottom: 8px; }
+
+@media (min-width: 860px) {
+  .s6cw-product {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: start;
+  }
+}
+
+/* ---- gallery ---- */
+.s6cw-gallery-main {
+  background: var(--s6cw-paper-warm);
+  border-radius: var(--s6cw-radius);
+  overflow: hidden;
+  border: 1px solid var(--s6cw-line);
+}
+.s6cw-gallery-main img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+.s6cw-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.s6cw-thumbs img {
+  width: 72px; height: 72px; object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--s6cw-line);
+  cursor: pointer;
+  transition: border-color 0.18s ease;
+}
+.s6cw-thumbs img:hover,
+.s6cw-thumbs img.is-active { border-color: var(--s6cw-accent); }
+
+@media (min-width: 860px) {
+  .s6cw-gallery { position: sticky; top: 24px; }
+}
+
+/* ---- buy column ---- */
+.s6cw-buy { padding-top: 24px; }
+@media (min-width: 860px) { .s6cw-buy { padding-top: 0; } }
+
+.s6cw-title {
+  font-family: var(--s6cw-serif);
+  font-size: 30px;
+  line-height: 1.18;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 860px) { .s6cw-title { font-size: 36px; } }
+
+.s6cw-byline {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+}
+.s6cw-byline a {
+  color: var(--s6cw-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.s6cw-byline a:hover { text-decoration: underline; }
+
+.s6cw-price {
+  font-size: 24px;
+  margin: 18px 0 4px;
+  font-weight: 600;
+}
+
+/* ---- variant selectors — visible, not wired (prototype scope) ---- */
+.s6cw-opt { margin-top: 20px; }
+.s6cw-opt-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--s6cw-ink-faint);
+  margin-bottom: 8px;
+}
+.s6cw-opt-label b { color: var(--s6cw-ink); font-weight: 600; }
+.s6cw-chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.s6cw-pick {
+  border: 1px solid var(--s6cw-line);
+  background: var(--s6cw-paper);
+  border-radius: 6px;
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.s6cw-pick:hover { border-color: var(--s6cw-ink-soft); }
+.s6cw-pick.is-active {
+  border-color: var(--s6cw-ink);
+  background: var(--s6cw-ink);
+  color: var(--s6cw-paper);
+}
+
+.s6cw-cart {
+  margin-top: 24px;
+  width: 100%;
+  background: var(--s6cw-ink);
+  color: var(--s6cw-paper);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s ease;
+}
+.s6cw-cart:hover { background: var(--s6cw-accent); }
+
+.s6cw-reassure {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--s6cw-ink-faint);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ============================================================
+   ENRICHMENT BLOCK 1 — AESTHETIC
+   The curated chip set. Vision Principle 2: a handful, not a
+   cloud. 8 chips total + palette swatches. Full 35-tag set lives
+   in the data object, deliberately NOT rendered.
+   ============================================================ */
+.s6cw-aesthetic {
+  margin-top: 20px;
+  padding: 16px 16px 14px;
+  background: var(--s6cw-paper-warm);
+  border: 1px solid var(--s6cw-line);
+  border-radius: var(--s6cw-radius);
+}
+.s6cw-aesthetic h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--s6cw-ink-faint);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.s6cw-attr { margin-bottom: 9px; }
+.s6cw-attr:last-child { margin-bottom: 0; }
+.s6cw-attr-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--s6cw-ink-faint);
+  margin-bottom: 5px;
+}
+/* discovery chips — every chip is a navigation handle (Principle 5) */
+.s6cw-tag {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 12.5px;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: var(--s6cw-paper);
+  border: 1px solid var(--s6cw-line);
+  color: var(--s6cw-ink);
+  margin: 0 5px 5px 0;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.s6cw-tag:hover { border-color: var(--s6cw-accent); color: var(--s6cw-accent); }
+
+/* palette swatches */
+.s6cw-swatch-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.s6cw-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.s6cw-swatch { text-align: center; }
+.s6cw-swatch-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--s6cw-line);
+  margin-bottom: 3px;
+}
+.s6cw-swatch-name {
+  font-size: 10px;
+  color: var(--s6cw-ink-faint);
+  letter-spacing: 0.02em;
+}
+.s6cw-palette-note {
+  font-size: 11.5px;
+  color: var(--s6cw-ink-faint);
+  font-style: italic;
+}
+
+/* ============================================================
+   ENRICHMENT BLOCK 2 — ABOUT THIS PIECE
+   The currently-blank section on the live page. The Cowork
+   summary fills it. Option 1 attribution: quiet AI note.
+   Two states documented in JS — artist-present vs artist-absent.
+   ============================================================ */
+.s6cw-section {
+  max-width: var(--s6cw-maxw);
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+.s6cw-section + .s6cw-section { padding-top: 8px; }
+.s6cw-rule {
+  max-width: var(--s6cw-maxw);
+  margin: 8px auto 0;
+  border: none;
+  border-top: 1px solid var(--s6cw-line);
+}
+.s6cw-h2 {
+  font-family: var(--s6cw-serif);
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.s6cw-about-body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--s6cw-ink);
+  max-width: 640px;
+}
+/* the quiet AI note — honest, low-volume (Vision Principle 8) */
+.s6cw-ai-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--s6cw-ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.s6cw-ai-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--s6cw-accent);
+  flex: none;
+}
+
+/* ---- artist row ---- */
+.s6cw-artist {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 28px;
+  padding: 20px;
+  background: var(--s6cw-paper-warm);
+  border-radius: var(--s6cw-radius);
+  max-width: 640px;
+}
+.s6cw-artist img {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  flex: none;
+}
+.s6cw-artist-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+.s6cw-artist-bio {
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+  margin-top: 3px;
+}
+.s6cw-artist-link {
+  font-size: 13px;
+  color: var(--s6cw-accent);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 7px;
+}
+.s6cw-artist-link:hover { text-decoration: underline; }
+
+/* ---- specs, plain ---- */
+.s6cw-specs { max-width: 640px; }
+.s6cw-specs li {
+  list-style: none;
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--s6cw-line);
+}
+.s6cw-specs li:last-child { border-bottom: none; }
+
+/* ============================================================
+   ACCORDION — collapsible content sections.
+   SEO/AI-SAFE PATTERN: all panel content is rendered into the DOM
+   on page load. CSS collapses it; JS toggles a class. Content is
+   never lazy-loaded or removed, so crawlers see 100% of it even
+   when a panel is visually collapsed. aria-expanded keeps it
+   accessible and machine-legible. (dev Principle 4 — standard.)
+   ============================================================ */
+.s6cw-accordion {
+  max-width: var(--s6cw-maxw);
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+}
+.s6cw-acc-item { border-bottom: 1px solid var(--s6cw-line); }
+.s6cw-acc-item:first-child { border-top: 1px solid var(--s6cw-line); }
+
+/* the tap target / header */
+.s6cw-acc-head {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: var(--s6cw-serif);
+  font-size: 21px;
+  color: var(--s6cw-ink);
+  text-align: left;
+  padding: 22px 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.s6cw-acc-head:hover { color: var(--s6cw-accent); }
+
+/* +/- indicator */
+.s6cw-acc-sign {
+  flex: none;
+  width: 22px; height: 22px;
+  position: relative;
+}
+.s6cw-acc-sign::before,
+.s6cw-acc-sign::after {
+  content: "";
+  position: absolute;
+  background: var(--s6cw-ink-soft);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.s6cw-acc-sign::before {            /* horizontal bar */
+  top: 50%; left: 0; right: 0; height: 1.5px;
+  transform: translateY(-50%);
+}
+.s6cw-acc-sign::after {             /* vertical bar — hidden when open */
+  left: 50%; top: 0; bottom: 0; width: 1.5px;
+  transform: translateX(-50%);
+}
+.s6cw-acc-head[aria-expanded="true"] .s6cw-acc-sign::after {
+  transform: translateX(-50%) scaleY(0);
+  opacity: 0;
+}
+.s6cw-acc-head[aria-expanded="true"] .s6cw-acc-sign::before {
+  background: var(--s6cw-accent);
+}
+
+/* the collapsible panel — content is always in the DOM */
+.s6cw-acc-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.28s ease;
+}
+.s6cw-acc-panel.is-open { max-height: 1600px; }
+.s6cw-acc-inner { padding: 2px 4px 26px; }
+
+/* ============================================================
+   ENRICHMENT BLOCK 3 — MORE LIKE THIS
+   Metadata-similar discovery. PROTOTYPE: stubbed with a clearly
+   labelled placeholder — see build notes, this is a production
+   gap (needs a real metadata-similarity query).
+   ============================================================ */
+.s6cw-similar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 640px) {
+  .s6cw-similar-grid { grid-template-columns: repeat(4, 1fr); }
+}
+.s6cw-similar-card {
+  border: 1px solid var(--s6cw-line);
+  border-radius: var(--s6cw-radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+.s6cw-similar-card .ph {
+  aspect-ratio: 1/1;
+  background: repeating-linear-gradient(
+    45deg, var(--s6cw-paper-warm), var(--s6cw-paper-warm) 11px,
+    var(--s6cw-accent-soft) 11px, var(--s6cw-accent-soft) 22px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--s6cw-ink-faint);
+  text-align: center; padding: 10px;
+}
+.s6cw-similar-card .cap { padding: 10px 12px; font-size: 12.5px; }
+
+.s6cw-stub-flag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s6cw-accent);
+  border: 1px dashed var(--s6cw-accent);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 14px;
+}
+
+/* footer */
+.s6cw-foot {
+  border-top: 1px solid var(--s6cw-line);
+  margin-top: 24px;
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--s6cw-ink-faint);
+}
+
+/* staggered page-load reveal — one orchestrated moment */
+.s6cw-reveal { opacity: 0; transform: translateY(10px); animation: s6cwIn 0.5s ease forwards; }
+@keyframes s6cwIn { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="s6cw-chrome">Memorial Day Sale &nbsp;|&nbsp; Up to 50% Off <strong>Wall Art</strong>, <strong>Bedding</strong> &amp; More</div>
+
+<nav class="s6cw-wrap s6cw-crumb" aria-label="Breadcrumb">
+  <a href="#">Home</a><span>/</span><a href="#">Canvas Prints</a><span>/</span>Cat Landscape 154 Framed Canvas Print
+</nav>
+
+<main class="s6cw-wrap">
+  <div class="s6cw-product">
+
+    <!-- ===== GALLERY ===== -->
+    <div class="s6cw-gallery">
+      <div class="s6cw-gallery-main">
+        <img id="s6cwHero"
+             src="https://society6.com/cdn/shop/files/ilovedoodle-cat-landscape-154-framed-art-canvas-black-front.jpg?v=1776129777&width=1024"
+             alt="Cat Landscape 154 framed canvas print — a minimalist line-art cat beneath an orange sun, shown front-on in a black frame">
+      </div>
+      <div class="s6cw-thumbs" id="s6cwThumbs"><!-- filled by JS --></div>
+    </div>
+
+    <!-- ===== BUY COLUMN ===== -->
+    <div class="s6cw-buy">
+      <h1 class="s6cw-title">Cat Landscape 154 Framed Canvas Print</h1>
+      <div class="s6cw-byline">By <a href="#">ilovedoodle</a></div>
+      <div class="s6cw-price">$125</div>
+
+      <!-- variant selectors: VISIBLE but not wired — prototype scope -->
+      <div class="s6cw-opt">
+        <div class="s6cw-opt-label">Frame: <b>Framed Canvas</b></div>
+        <div class="s6cw-chips-row">
+          <button class="s6cw-pick is-active">Framed Canvas</button>
+          <button class="s6cw-pick">No Frame</button>
+        </div>
+      </div>
+      <div class="s6cw-opt">
+        <div class="s6cw-opt-label">Size: <b>Small 8" × 10"</b></div>
+        <div class="s6cw-chips-row">
+          <button class="s6cw-pick is-active">Small 8" × 10"</button>
+          <button class="s6cw-pick">Medium 16" × 20"</button>
+          <button class="s6cw-pick">Large 24" × 30"</button>
+        </div>
+      </div>
+
+      <button class="s6cw-cart">Add to Cart</button>
+      <div class="s6cw-reassure">
+        <span>Made to order — typically ships in 3–4 business days.</span>
+        <span>Easy 30-day returns.</span>
+      </div>
+
+      <!-- ===== ENRICHMENT 1: AESTHETIC BLOCK ===== -->
+      <section class="s6cw-aesthetic" id="s6cwAesthetic" aria-label="Aesthetic">
+        <h2>Aesthetic</h2>
+        <div id="s6cwAttrs"><!-- filled by JS from data object --></div>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<hr class="s6cw-rule">
+
+<!-- ============================================================
+     COLLAPSIBLE CONTENT SECTIONS
+     Four labelled sections. About This Piece + Meet the Artist open
+     by default; Specifications + Shipping & Returns collapsed.
+     All panel content is in the DOM on load (SEO/AI-safe).
+     ============================================================ -->
+<div class="s6cw-accordion">
+
+  <!-- ABOUT THIS PIECE — open by default -->
+  <div class="s6cw-acc-item">
+    <button class="s6cw-acc-head" aria-expanded="true" aria-controls="s6cwPanelAbout">
+      About This Piece <span class="s6cw-acc-sign" aria-hidden="true"></span>
+    </button>
+    <div class="s6cw-acc-panel is-open" id="s6cwPanelAbout">
+      <div class="s6cw-acc-inner">
+        <div id="s6cwAboutBody"><!-- filled by JS — artist-present vs artist-absent --></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEET THE ARTIST — open by default -->
+  <div class="s6cw-acc-item">
+    <button class="s6cw-acc-head" aria-expanded="true" aria-controls="s6cwPanelArtist">
+      Meet the Artist <span class="s6cw-acc-sign" aria-hidden="true"></span>
+    </button>
+    <div class="s6cw-acc-panel is-open" id="s6cwPanelArtist">
+      <div class="s6cw-acc-inner">
+        <div class="s6cw-artist">
+          <img src="https://society6.com/cdn/shop/files/ilovedoodle_503ff18a-22a2-402e-a823-29ca62efc4dc.jpg?v=1767120053&width=120" alt="ilovedoodle">
+          <div>
+            <div class="s6cw-artist-name">ilovedoodle</div>
+            <div class="s6cw-artist-bio">Hi there! My name is Lim Heng Swee aka ilovedoodle, an illustrator who wants to doodle a smile on Earth's face.</div>
+            <a class="s6cw-artist-link" href="#">Visit artist shop →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECIFICATIONS — collapsed by default -->
+  <div class="s6cw-acc-item">
+    <button class="s6cw-acc-head" aria-expanded="false" aria-controls="s6cwPanelSpecs">
+      Specifications <span class="s6cw-acc-sign" aria-hidden="true"></span>
+    </button>
+    <div class="s6cw-acc-panel" id="s6cwPanelSpecs">
+      <div class="s6cw-acc-inner">
+        <ul class="s6cw-specs">
+          <li>Bright white, fine cotton-poly blend matte canvas.</li>
+          <li>Gallery-quality ink for rich, deep saturation.</li>
+          <li>Hand-stretched canvas over pine stretcher bars.</li>
+          <li>Framed canvas prints include hanging hardware.</li>
+          <li>Made in the USA.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHIPPING & RETURNS — collapsed by default. Copy from live page. -->
+  <div class="s6cw-acc-item">
+    <button class="s6cw-acc-head" aria-expanded="false" aria-controls="s6cwPanelShip">
+      Shipping &amp; Returns <span class="s6cw-acc-sign" aria-hidden="true"></span>
+    </button>
+    <div class="s6cw-acc-panel" id="s6cwPanelShip">
+      <div class="s6cw-acc-inner">
+        <p class="s6cw-about-body" style="margin-bottom:14px;">
+          <strong>Shipping.</strong> Items are made to order and typically ship within
+          3&ndash;4 business days.
+        </p>
+        <p class="s6cw-about-body">
+          <strong>Returns.</strong> Return requests can be made within 30 days of your
+          item's delivery &mdash; no stress, no hassle.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr class="s6cw-rule">
+
+<!-- ===== ENRICHMENT 3: MORE LIKE THIS (stubbed) ===== -->
+<section class="s6cw-section">
+  <h2 class="s6cw-h2">More like this</h2>
+  <span class="s6cw-stub-flag">Prototype stub — production gap</span>
+  <div class="s6cw-similar-grid" id="s6cwSimilar"><!-- filled by JS --></div>
+</section>
+
+<footer class="s6cw-foot">
+  Society6 — enriched PDP prototype · Cat Landscape 154 · not a live page
+</footer>
+
+<script>
+/* ================================================================
+   THE DATA OBJECT  —  this is the production-port spec.
+   In production, build this server-side from the product record +
+   its Cowork metafields, then feed the SAME render functions below.
+   Raw Cowork fields are kept in `_raw` so nothing is lost; the
+   curated subsets are what actually render (Vision Principle 2).
+   ================================================================ */
+const PRODUCT = {
+  title: "Cat Landscape 154 Framed Canvas Print",
+  artist: { name: "ilovedoodle", url: "#" },
+  price: "$125",
+
+  // --- Cowork enrichment ---
+  cowork: {
+    // one-sentence visual summary — fills "About This Piece"
+    visualDescription: "A minimalist line-art illustration of a stylized cat beneath an orange sun with geometric arch patterns in warm, monochromatic tones.",
+
+    // artist's own description of THIS artwork. Empty here — ilovedoodle
+    // wrote a bio but no piece description. When this is non-empty in
+    // production, it LEADS and the AI summary steps aside (Principle 1).
+    artistDescription: "",
+
+    // CURATED for display — the ~8 chips. Each links somewhere.
+    // PRODUCTION NOTE: hrefs are placeholders -> real collection URLs.
+    display: {
+      style:   [ {label:"Line Art", href:"#"}, {label:"Minimalist", href:"#"}, {label:"Hand-Drawn", href:"#"} ],
+      mood:    [ {label:"Whimsical", href:"#"}, {label:"Serene", href:"#"} ],
+      subject: [ {label:"Cat", href:"#"}, {label:"Geometric", href:"#"}, {label:"Mid-Century Modern", href:"#"} ]
+    },
+
+    // palette — literal colors get swatches; characteristics get a note
+    paletteColors: [
+      {name:"Orange",     hex:"#d97333"},
+      {name:"Terracotta", hex:"#c8612e"},
+      {name:"Black",      hex:"#1a1a1a"},
+      {name:"White",      hex:"#f4f1ec"}
+    ],
+    paletteNote: "Warm, monochromatic",
+
+    // FULL raw Cowork fields — stored, deliberately NOT all rendered.
+    _raw: {
+      category: ["animal","abstract"],
+      subjectTags: ["cat","line drawing","geometric","sun","minimalist cat","abstract lines","orange sun","modern art","contemporary illustration","feline","simple lines","warm tones","arched lines","iconic cat","stylized","mid-century modern","bohemian","zen"],
+      mood: ["whimsical","playful","serene","elegant"],
+      palette: ["orange","terracotta","black","white","monochrome","warm"],
+      style: ["line-art","minimalist","illustration","hand-drawn","modern","whimsical","graphic"]
+    }
+  },
+
+  images: [
+    "https://society6.com/cdn/shop/files/ilovedoodle-cat-landscape-154-framed-art-canvas-black-front.jpg?v=1776129777&width=1024",
+    "https://society6.com/cdn/shop/files/framed-canvas-black-front.webp?v=1776373338&width=1024",
+    "https://society6.com/cdn/shop/files/framed-canvas-black-corner.webp?v=1776373318&width=1024"
+  ],
+
+  // metadata-similar products. PROTOTYPE: stubbed. Production needs a
+  // real similarity query over Cowork tags, with category/artist fallback.
+  similarStub: [
+    "Shared tags: cat · line-art · minimalist",
+    "Shared tags: warm tones · geometric",
+    "Shared tags: mid-century modern · abstract",
+    "Shared tags: whimsical · illustration"
+  ]
+};
+
+/* ---- render: gallery thumbs ---- */
+(function renderThumbs(){
+  const box = document.getElementById('s6cwThumbs');
+  const hero = document.getElementById('s6cwHero');
+  PRODUCT.images.forEach((src,i)=>{
+    const t = document.createElement('img');
+    t.src = src.replace('width=1024','width=144');
+    t.alt = "View " + (i+1);
+    if(i===0) t.className='is-active';
+    t.onclick = ()=>{
+      hero.src = src;
+      [...box.children].forEach(c=>c.classList.remove('is-active'));
+      t.classList.add('is-active');
+    };
+    box.appendChild(t);
+  });
+})();
+
+/* ---- render: aesthetic block (graceful degradation built in) ---- */
+(function renderAesthetic(){
+  const cw = PRODUCT.cowork;
+  const host = document.getElementById('s6cwAttrs');
+  const attr = (name, chips) => {
+    if(!chips || !chips.length) return '';            // Principle 1: hide if absent
+    const tags = chips.map(c=>`<a class="s6cw-tag" href="${c.href}">${c.label}</a>`).join('');
+    return `<div class="s6cw-attr"><div class="s6cw-attr-name">${name}</div>${tags}</div>`;
+  };
+  let html = attr('Style', cw.display.style)
+           + attr('Mood', cw.display.mood)
+           + attr('Subject', cw.display.subject);
+
+  if(cw.paletteColors && cw.paletteColors.length){
+    const sw = cw.paletteColors.map(c=>
+      `<div class="s6cw-swatch">
+         <div class="s6cw-swatch-dot" style="background:${c.hex}"></div>
+         <div class="s6cw-swatch-name">${c.name}</div>
+       </div>`).join('');
+    html += `<div class="s6cw-attr"><div class="s6cw-attr-name">Palette</div>
+             <div class="s6cw-swatch-line">
+               <div class="s6cw-swatches">${sw}</div>
+               <div class="s6cw-palette-note">${cw.paletteNote}</div>
+             </div></div>`;
+  }
+  // if NOTHING enriched, hide the whole block — never an empty shell
+  if(!html.trim()){ document.getElementById('s6cwAesthetic').style.display='none'; return; }
+  host.innerHTML = html;
+})();
+
+/* ---- render: About This Piece — two documented states ---- */
+(function renderAbout(){
+  const cw = PRODUCT.cowork;
+  const host = document.getElementById('s6cwAboutBody');
+
+  if(cw.artistDescription && cw.artistDescription.trim()){
+    /* STATE A — artist wrote about this piece: their words lead,
+       attributed to them. AI summary steps aside. (Principle 1) */
+    host.innerHTML =
+      `<p class="s6cw-about-body">${cw.artistDescription}</p>
+       <div class="s6cw-ai-note"><span class="s6cw-ai-dot"></span>
+         Description by the artist, ilovedoodle.</div>`;
+  } else if(cw.visualDescription && cw.visualDescription.trim()){
+    /* STATE B — artist silent on this piece: Cowork summary fills the
+       gap, labelled. Option 1 attribution, quiet treatment. */
+    host.innerHTML =
+      `<p class="s6cw-about-body">${cw.visualDescription}</p>
+       <div class="s6cw-ai-note"><span class="s6cw-ai-dot"></span>
+         Visual description generated by Society6 AI from the artwork.</div>`;
+  } else {
+    /* STATE C — no data at all: hide the whole About accordion item. */
+    document.getElementById('s6cwPanelAbout').closest('.s6cw-acc-item').style.display='none';
+  }
+})();
+
+/* ---- accordion toggle. Content is already in the DOM; this only
+   flips visibility + aria-expanded. SEO/AI-safe by construction. ---- */
+(function initAccordion(){
+  document.querySelectorAll('.s6cw-acc-head').forEach(head=>{
+    head.addEventListener('click', ()=>{
+      const panel = document.getElementById(head.getAttribute('aria-controls'));
+      const open = head.getAttribute('aria-expanded') === 'true';
+      head.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('is-open', !open);
+    });
+  });
+})();
+
+/* ---- render: similar stub ---- */
+(function renderSimilar(){
+  const grid = document.getElementById('s6cwSimilar');
+  PRODUCT.similarStub.forEach(label=>{
+    const a = document.createElement('a');
+    a.className='s6cw-similar-card'; a.href='#';
+    a.innerHTML = `<div class="ph">${label}</div>
+                   <div class="cap">Metadata-similar product</div>`;
+    grid.appendChild(a);
+  });
+})();
+
+/* ---- buildSchema(): regenerate JSON-LD from the data object so the
+   structured data can never drift from what's displayed (Principle 4).
+   The static <script> in <head> is the crawl-time copy; this is the
+   proof that both come from one source. ---- */
+(function buildSchema(){
+  const cw = PRODUCT.cowork;
+  const props = [];
+  cw.display.style.forEach(c=>props.push({"@type":"PropertyValue","name":"Style","value":c.label}));
+  cw.display.mood.forEach(c=>props.push({"@type":"PropertyValue","name":"Mood","value":c.label}));
+  cw.display.subject.forEach(c=>props.push({"@type":"PropertyValue","name":"Subject","value":c.label}));
+  cw.paletteColors.forEach(c=>props.push({"@type":"PropertyValue","name":"Palette","value":c.name}));
+  const schema = {
+    "@context":"https://schema.org","@type":"Product",
+    "name":PRODUCT.title,
+    "image":PRODUCT.images[0].split('?')[0],
+    "description":cw.visualDescription,
+    "brand":{"@type":"Brand","name":"Society6"},
+    "category":"Canvas Prints",
+    "creator":{"@type":"Person","name":PRODUCT.artist.name},
+    "offers":{"@type":"Offer","price":"125.00","priceCurrency":"USD",
+              "availability":"https://schema.org/InStock"},
+    "additionalProperty":props
+  };
+  const el = document.createElement('script');
+  el.type='application/ld+json'; el.id='s6cw-schema-runtime';
+  el.textContent = JSON.stringify(schema,null,2);
+  document.head.appendChild(el);
+})();
+
+/* page-load reveal */
+document.querySelectorAll('.s6cw-product, .s6cw-accordion, .s6cw-section').forEach((el,i)=>{
+  el.classList.add('s6cw-reveal');
+  el.style.animationDelay = (i*0.08)+'s';
+});
+</script>
+</body>
+</html>
