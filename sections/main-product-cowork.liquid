@@ -1,0 +1,1050 @@
+{%- comment -%}
+  sections/main-product-cowork.liquid
+  Enriched PDP — Cowork enrichment layered onto standard product data.
+  Ported from the standalone prototype (see enriched-pdp_2.html in the
+  repo root) and built against the session brief
+  (claude-code-session-brief.md).
+
+  DATA MODEL
+  ----------
+  Base product fields come from the standard Liquid `product` object
+  (title, vendor, images, price, variants). The single sandbox variant
+  ($89, Default Title) renders as-is — frame/size selectors below are
+  visible-but-static placeholder UI matching the prototype scope.
+
+  Cowork enrichment lives in the `cowork` metafield namespace:
+    cowork.summary  — single_line_text_field — plain string
+    cowork.subject  — list.single_line_text_field
+    cowork.style    — list.single_line_text_field
+    cowork.palette  — list.single_line_text_field
+    cowork.mood     — list.single_line_text_field
+    cowork.keywords — list.single_line_text_field
+
+  The five list-type fields hold a list with a single pipe-delimited
+  string (quirk of how the Cowork pipeline writes them). Access pattern:
+    metafield.value | first | split: '|'
+  Plain `metafield.value` on a list type returns the array, not the
+  string — so `| first` to get the inner string, then `| split: '|'`
+  to get the tokens.
+
+  Two prototype <-> Shopify name renames worth knowing if you cross-
+  reference the prototype's data object:
+    prototype `subjectTags` == Shopify `cowork.keywords`
+    prototype `category`    == Shopify `cowork.subject`
+
+  Artist data is per-product and lives in the `artist` metafield
+  namespace (convention for the production port — see
+  PORT-TO-PRODUCTION-PDP.md):
+    artist.name      — single_line_text_field — display name
+    artist.bio       — multi_line_text_field  — short bio
+    artist.shop_url  — url — link to artist's storefront/profile
+    artist.avatar    — url — direct image URL (sandbox uses a hot-linked
+                       society6.com CDN URL; production should switch
+                       this to a file_reference and host the image)
+
+  None of those metafields are populated on Cat Landscape 154 today.
+  The Meet the Artist block is gated on `artist.bio` and renders
+  nothing (no empty section, no placeholder) when bio is absent. The
+  byline ("By <artist>") is gated on `artist.name`. This is correct,
+  not a bug — see the brief, Step 2a.
+
+  GRACEFUL DEGRADATION
+  --------------------
+  Every Cowork-driven block hides cleanly when its metafield is blank:
+  Aesthetic chips, palette swatches, About This Piece, Meet the Artist.
+  The only always-present sections are template-static (Specifications,
+  Shipping & Returns) per the brief.
+
+  CURATION
+  --------
+  Per Step 4 of the brief, the page renders a curated subset of tags,
+  not the full ~35-tag set:
+    Style    — first 3 from cowork.style
+    Mood     — first 2 from cowork.mood
+    Subject  — first 3 from cowork.keywords  (yes, keywords -> Subject)
+    Palette  — swatches for tokens that match a known-color hex map;
+               anything else (e.g. "monochrome", "warm") becomes the
+               inline palette caption.
+  The full strings stay in the metafields; only the curated subset
+  shows on the page AND in the JSON-LD additionalProperty (consistency
+  rule from the brief: schema mirrors what's visible).
+
+  Note: the prototype's exact label set for this product happened to
+  drop "illustration" from style and "playful/elegant" from mood as
+  near-duplicates. Algorithmic first-N matches the prototype on
+  Subject and Palette; on Style and Mood the first-N approach will
+  emit slightly different labels than the prototype's hand-curated
+  list. That trade-off is deliberate — algorithmic curation is
+  portable across the whole catalog; hand-curating per product is
+  not. Production may want a smarter "skip near-duplicate" rule;
+  flag in PORT-TO-PRODUCTION-PDP.md.
+
+  SCOPE
+  -----
+  - Variants visible-but-static (prototype scope, agreed).
+  - Chip hrefs are placeholders. Real collection routing is a
+    production-discovery question (see brief's "Known production gaps").
+  - "More like this" is a stub flagged as a production gap.
+
+  CSS class prefix `.s6cw-` is intentional (collision-free namespace)
+  and must be preserved on the production port.
+{%- endcomment -%}
+
+{%- liquid
+  # ---- Cowork enrichment reads ----
+  assign cw_summary    = product.metafields.cowork.summary.value
+  assign style_raw     = product.metafields.cowork.style.value
+  assign mood_raw      = product.metafields.cowork.mood.value
+  assign keywords_raw  = product.metafields.cowork.keywords.value
+  assign palette_raw   = product.metafields.cowork.palette.value
+
+  # ---- Artist data reads ----
+  assign artist_name   = product.metafields.artist.name.value
+  assign artist_bio    = product.metafields.artist.bio.value
+  assign artist_avatar = product.metafields.artist.avatar.value
+  assign artist_url    = product.metafields.artist.shop_url.value
+
+  # ---- Curation counts ----
+  assign style_take   = 3
+  assign mood_take    = 2
+  assign subject_take = 3
+
+  # ---- JSON-LD additionalProperty accumulator (string of JSON objects) ----
+  assign jsonld_props = ''
+-%}
+
+<article class="s6cw-page" data-product-id="{{ product.id }}">
+
+  <nav class="s6cw-wrap s6cw-crumb" aria-label="Breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a>
+    <span>/</span>
+    {%- if product.product_type != blank -%}
+      {%- assign type_handle = product.product_type | handleize -%}
+      <a href="{{ routes.collections_url }}/{{ type_handle }}">{{ product.product_type }}</a>
+      <span>/</span>
+    {%- endif -%}
+    {{ product.title }}
+  </nav>
+
+  <main class="s6cw-wrap">
+    <div class="s6cw-product">
+
+      {%- comment -%} ===== GALLERY ===== {%- endcomment -%}
+      <div class="s6cw-gallery">
+        <div class="s6cw-gallery-main">
+          {%- if product.featured_image -%}
+            <img
+              id="s6cwHero"
+              src="{{ product.featured_image | image_url: width: 1200 }}"
+              alt="{{ product.featured_image.alt | default: product.title | escape }}"
+              width="1200"
+              height="1200"
+              loading="eager">
+          {%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="s6cw-thumbs" id="s6cwThumbs">
+            {%- for img in product.images limit: 6 -%}
+              <img
+                src="{{ img | image_url: width: 144 }}"
+                data-full="{{ img | image_url: width: 1200 }}"
+                alt="{{ img.alt | default: product.title | escape }} — view {{ forloop.index }}"
+                width="72"
+                height="72"
+                class="{% if forloop.first %}is-active{% endif %}">
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ===== BUY COLUMN ===== {%- endcomment -%}
+      <div class="s6cw-buy">
+        <h1 class="s6cw-title">{{ product.title }}</h1>
+
+        {%- if artist_name != blank -%}
+          <div class="s6cw-byline">
+            By
+            {%- if artist_url != blank -%}
+              <a href="{{ artist_url }}">{{ artist_name }}</a>
+            {%- else -%}
+              <span class="s6cw-byline-name">{{ artist_name }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="s6cw-price">{{ product.price | money }}</div>
+
+        {%- comment -%}
+          Variant selectors: visible-but-static per prototype scope.
+          The sandbox product carries a single Default Title variant —
+          we render the prototype's frame/size chip groups as
+          presentational UI only. NOT wired to real variants. If
+          variants are added in admin, swap this block for a real
+          variant picker (Horizon's default <variant-picker> works
+          fine in a product context).
+        {%- endcomment -%}
+        <div class="s6cw-opt">
+          <div class="s6cw-opt-label">Frame: <b>Framed Canvas</b></div>
+          <div class="s6cw-chips-row">
+            <button type="button" class="s6cw-pick is-active" aria-pressed="true">Framed Canvas</button>
+            <button type="button" class="s6cw-pick" aria-pressed="false">No Frame</button>
+          </div>
+        </div>
+        <div class="s6cw-opt">
+          <div class="s6cw-opt-label">Size: <b>Small 8" × 10"</b></div>
+          <div class="s6cw-chips-row">
+            <button type="button" class="s6cw-pick is-active" aria-pressed="true">Small 8" × 10"</button>
+            <button type="button" class="s6cw-pick" aria-pressed="false">Medium 16" × 20"</button>
+            <button type="button" class="s6cw-pick" aria-pressed="false">Large 24" × 30"</button>
+          </div>
+        </div>
+
+        {%- form 'product', product, class: 's6cw-cart-form' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit" class="s6cw-cart"{% unless product.available %} disabled{% endunless %}>
+            {%- if product.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
+          </button>
+        {%- endform -%}
+
+        <div class="s6cw-reassure">
+          <span>Made to order — typically ships in 3–4 business days.</span>
+          <span>Easy 30-day returns.</span>
+        </div>
+
+        {%- comment -%} ===== ENRICHMENT 1: AESTHETIC ===== {%- endcomment -%}
+        {%- capture aesthetic_inner -%}
+
+          {%- comment -%} ---- STYLE ---- {%- endcomment -%}
+          {%- if style_raw != blank -%}
+            {%- assign style_tokens = style_raw | first | split: '|' -%}
+            {%- assign style_count = 0 -%}
+            {%- capture style_chips -%}
+              {%- for tok in style_tokens -%}
+                {%- if style_count >= style_take -%}{%- break -%}{%- endif -%}
+                {%- assign trimmed = tok | strip -%}
+                {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
+                {%- capture label -%}{%- render 's6cw-titlecase', token: trimmed -%}{%- endcapture -%}
+                {%- assign label = label | strip -%}
+                <a class="s6cw-tag" href="#">{{ label }}</a>
+                {%- capture entry -%}{"@type":"PropertyValue","name":"Style","value":{{ label | json }}}{%- endcapture -%}
+                {%- if jsonld_props == '' -%}{%- assign jsonld_props = entry -%}{%- else -%}{%- assign jsonld_props = jsonld_props | append: ',' | append: entry -%}{%- endif -%}
+                {%- assign style_count = style_count | plus: 1 -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if style_chips != blank -%}
+              <div class="s6cw-attr">
+                <div class="s6cw-attr-name">Style</div>
+                {{ style_chips }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- comment -%} ---- MOOD ---- {%- endcomment -%}
+          {%- if mood_raw != blank -%}
+            {%- assign mood_tokens = mood_raw | first | split: '|' -%}
+            {%- assign mood_count = 0 -%}
+            {%- capture mood_chips -%}
+              {%- for tok in mood_tokens -%}
+                {%- if mood_count >= mood_take -%}{%- break -%}{%- endif -%}
+                {%- assign trimmed = tok | strip -%}
+                {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
+                {%- capture label -%}{%- render 's6cw-titlecase', token: trimmed -%}{%- endcapture -%}
+                {%- assign label = label | strip -%}
+                <a class="s6cw-tag" href="#">{{ label }}</a>
+                {%- capture entry -%}{"@type":"PropertyValue","name":"Mood","value":{{ label | json }}}{%- endcapture -%}
+                {%- if jsonld_props == '' -%}{%- assign jsonld_props = entry -%}{%- else -%}{%- assign jsonld_props = jsonld_props | append: ',' | append: entry -%}{%- endif -%}
+                {%- assign mood_count = mood_count | plus: 1 -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if mood_chips != blank -%}
+              <div class="s6cw-attr">
+                <div class="s6cw-attr-name">Mood</div>
+                {{ mood_chips }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- comment -%} ---- SUBJECT (from cowork.keywords) ---- {%- endcomment -%}
+          {%- if keywords_raw != blank -%}
+            {%- assign subject_tokens = keywords_raw | first | split: '|' -%}
+            {%- assign subject_count = 0 -%}
+            {%- capture subject_chips -%}
+              {%- for tok in subject_tokens -%}
+                {%- if subject_count >= subject_take -%}{%- break -%}{%- endif -%}
+                {%- assign trimmed = tok | strip -%}
+                {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
+                {%- capture label -%}{%- render 's6cw-titlecase', token: trimmed -%}{%- endcapture -%}
+                {%- assign label = label | strip -%}
+                <a class="s6cw-tag" href="#">{{ label }}</a>
+                {%- capture entry -%}{"@type":"PropertyValue","name":"Subject","value":{{ label | json }}}{%- endcapture -%}
+                {%- if jsonld_props == '' -%}{%- assign jsonld_props = entry -%}{%- else -%}{%- assign jsonld_props = jsonld_props | append: ',' | append: entry -%}{%- endif -%}
+                {%- assign subject_count = subject_count | plus: 1 -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if subject_chips != blank -%}
+              <div class="s6cw-attr">
+                <div class="s6cw-attr-name">Subject</div>
+                {{ subject_chips }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- comment -%} ---- PALETTE ----
+            Known-color tokens render as swatches (and add a JSON-LD
+            entry). Unknown tokens (e.g. "monochrome", "warm") fall
+            through into the inline caption — palette characteristics,
+            not literal colors.
+          {%- endcomment -%}
+          {%- if palette_raw != blank -%}
+            {%- assign palette_tokens = palette_raw | first | split: '|' -%}
+            {%- assign palette_caption = '' -%}
+            {%- capture palette_swatches -%}
+              {%- for tok in palette_tokens -%}
+                {%- assign trimmed = tok | strip | downcase -%}
+                {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
+                {%- assign hex = '' -%}
+                {%- case trimmed -%}
+                  {%- when 'orange'     -%}{%- assign hex = '#d97333' -%}
+                  {%- when 'terracotta' -%}{%- assign hex = '#c8612e' -%}
+                  {%- when 'rust'       -%}{%- assign hex = '#b85c2c' -%}
+                  {%- when 'red'        -%}{%- assign hex = '#c0392b' -%}
+                  {%- when 'pink'       -%}{%- assign hex = '#e89dac' -%}
+                  {%- when 'coral'      -%}{%- assign hex = '#e8806e' -%}
+                  {%- when 'peach'      -%}{%- assign hex = '#f0b390' -%}
+                  {%- when 'yellow'     -%}{%- assign hex = '#e8b94d' -%}
+                  {%- when 'gold'       -%}{%- assign hex = '#c9a032' -%}
+                  {%- when 'mustard'    -%}{%- assign hex = '#c89a3a' -%}
+                  {%- when 'green'      -%}{%- assign hex = '#5a8a5b' -%}
+                  {%- when 'olive'      -%}{%- assign hex = '#7a7a3a' -%}
+                  {%- when 'sage'       -%}{%- assign hex = '#9fb39f' -%}
+                  {%- when 'teal'       -%}{%- assign hex = '#3a8a85' -%}
+                  {%- when 'blue'       -%}{%- assign hex = '#2f5b8a' -%}
+                  {%- when 'navy'       -%}{%- assign hex = '#1a2740' -%}
+                  {%- when 'purple'     -%}{%- assign hex = '#6b4a8a' -%}
+                  {%- when 'lavender'   -%}{%- assign hex = '#b6a8d1' -%}
+                  {%- when 'brown'      -%}{%- assign hex = '#8a5a3a' -%}
+                  {%- when 'tan'        -%}{%- assign hex = '#c9a484' -%}
+                  {%- when 'beige'      -%}{%- assign hex = '#e8dcc9' -%}
+                  {%- when 'cream'      -%}{%- assign hex = '#f4ead8' -%}
+                  {%- when 'ivory'      -%}{%- assign hex = '#f7f1e3' -%}
+                  {%- when 'gray'       -%}{%- assign hex = '#888888' -%}
+                  {%- when 'grey'       -%}{%- assign hex = '#888888' -%}
+                  {%- when 'charcoal'   -%}{%- assign hex = '#3a3a3a' -%}
+                  {%- when 'black'      -%}{%- assign hex = '#1a1a1a' -%}
+                  {%- when 'white'      -%}{%- assign hex = '#f4f1ec' -%}
+                {%- endcase -%}
+                {%- capture name -%}{%- render 's6cw-titlecase', token: trimmed -%}{%- endcapture -%}
+                {%- assign name = name | strip -%}
+                {%- if hex != '' -%}
+                  <div class="s6cw-swatch">
+                    <div class="s6cw-swatch-dot" style="background:{{ hex }}"></div>
+                    <div class="s6cw-swatch-name">{{ name }}</div>
+                  </div>
+                  {%- capture entry -%}{"@type":"PropertyValue","name":"Palette","value":{{ name | json }}}{%- endcapture -%}
+                  {%- if jsonld_props == '' -%}{%- assign jsonld_props = entry -%}{%- else -%}{%- assign jsonld_props = jsonld_props | append: ',' | append: entry -%}{%- endif -%}
+                {%- else -%}
+                  {%- if palette_caption == '' -%}
+                    {%- assign palette_caption = name -%}
+                  {%- else -%}
+                    {%- assign palette_caption = palette_caption | append: ', ' | append: name -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if palette_swatches != blank or palette_caption != blank -%}
+              <div class="s6cw-attr">
+                <div class="s6cw-attr-name">Palette</div>
+                <div class="s6cw-swatch-line">
+                  {%- if palette_swatches != blank -%}
+                    <div class="s6cw-swatches">{{ palette_swatches }}</div>
+                  {%- endif -%}
+                  {%- if palette_caption != blank -%}
+                    <div class="s6cw-palette-note">{{ palette_caption }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+        {%- endcapture -%}
+
+        {%- assign aesthetic_clean = aesthetic_inner | strip -%}
+        {%- if aesthetic_clean != blank -%}
+          <section class="s6cw-aesthetic" aria-label="Aesthetic">
+            <h2>Aesthetic</h2>
+            {{ aesthetic_inner }}
+          </section>
+        {%- endif -%}
+
+      </div>{%- comment -%} /.s6cw-buy {%- endcomment -%}
+    </div>{%- comment -%} /.s6cw-product {%- endcomment -%}
+  </main>
+
+  <hr class="s6cw-rule">
+
+  {%- comment -%} ============================================================
+    COLLAPSIBLE CONTENT SECTIONS
+    All panel content is in the DOM on load (SEO/AI-safe). JS only
+    toggles aria-expanded + an is-open class. Do not lazy-load.
+    Items hide entirely when their data isn't available.
+  ============================================================ {%- endcomment -%}
+
+  <div class="s6cw-accordion">
+
+    {%- comment -%} ---- ABOUT THIS PIECE ----
+      Two states from the brief:
+      A) Artist wrote a description (product.description not blank)
+         -> their words lead, attributed to them.
+      B) Artist silent, Cowork summary present
+         -> Cowork summary fills it, with the quiet AI attribution.
+      Both states already in the DOM; whichever one matches renders.
+      C) Neither -> the whole item hides.
+    {%- endcomment -%}
+    {%- assign artist_description = product.description | strip_html | strip -%}
+    {%- if artist_description != blank or cw_summary != blank -%}
+      <div class="s6cw-acc-item">
+        <button class="s6cw-acc-head" aria-expanded="true" aria-controls="s6cwPanelAbout" type="button">
+          About This Piece <span class="s6cw-acc-sign" aria-hidden="true"></span>
+        </button>
+        <div class="s6cw-acc-panel is-open" id="s6cwPanelAbout">
+          <div class="s6cw-acc-inner">
+            {%- if artist_description != blank -%}
+              <div class="s6cw-about-body">{{ product.description }}</div>
+              <div class="s6cw-ai-note">
+                <span class="s6cw-ai-dot"></span>
+                Description by the artist{%- if artist_name != blank -%}, {{ artist_name }}{%- endif -%}.
+              </div>
+            {%- elsif cw_summary != blank -%}
+              <p class="s6cw-about-body">{{ cw_summary }}</p>
+              <div class="s6cw-ai-note">
+                <span class="s6cw-ai-dot"></span>
+                Visual description generated by Society6 AI from the artwork.
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ---- MEET THE ARTIST ----
+      Gated on artist.bio. No bio -> no section. See port notes for
+      the production data dependency on the artist namespace.
+    {%- endcomment -%}
+    {%- if artist_bio != blank -%}
+      <div class="s6cw-acc-item">
+        <button class="s6cw-acc-head" aria-expanded="true" aria-controls="s6cwPanelArtist" type="button">
+          Meet the Artist <span class="s6cw-acc-sign" aria-hidden="true"></span>
+        </button>
+        <div class="s6cw-acc-panel is-open" id="s6cwPanelArtist">
+          <div class="s6cw-acc-inner">
+            <div class="s6cw-artist">
+              {%- if artist_avatar != blank -%}
+                {%- comment -%}
+                  artist.avatar is a url-type metafield holding a direct
+                  image URL. Rendered as-is — no image_url filter, since
+                  it's a string not a Shopify file_reference. Production
+                  should swap to file_reference and use | image_url.
+                {%- endcomment -%}
+                <img src="{{ artist_avatar | escape }}" alt="{{ artist_name | default: 'Artist' | escape }}" width="56" height="56" loading="lazy">
+              {%- endif -%}
+              <div>
+                {%- if artist_name != blank -%}
+                  <div class="s6cw-artist-name">{{ artist_name }}</div>
+                {%- endif -%}
+                <div class="s6cw-artist-bio">{{ artist_bio }}</div>
+                {%- if artist_url != blank -%}
+                  <a class="s6cw-artist-link" href="{{ artist_url }}">Visit artist shop →</a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ---- SPECIFICATIONS ----
+      Template-static per the brief (Bucket A). Genuinely identical
+      for every canvas print — catalog-wide boilerplate, not per-
+      product data. Always present because the template supplies the
+      text. If production later wants per-product specs, this becomes
+      a metafield-driven block; flag it, don't build it.
+    {%- endcomment -%}
+    <div class="s6cw-acc-item">
+      <button class="s6cw-acc-head" aria-expanded="false" aria-controls="s6cwPanelSpecs" type="button">
+        Specifications <span class="s6cw-acc-sign" aria-hidden="true"></span>
+      </button>
+      <div class="s6cw-acc-panel" id="s6cwPanelSpecs">
+        <div class="s6cw-acc-inner">
+          <ul class="s6cw-specs">
+            <li>Bright white, fine cotton-poly blend matte canvas.</li>
+            <li>Gallery-quality ink for rich, deep saturation.</li>
+            <li>Hand-stretched canvas over pine stretcher bars.</li>
+            <li>Framed canvas prints include hanging hardware.</li>
+            <li>Made in the USA.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ---- SHIPPING & RETURNS ----
+      Template-static per the brief (Bucket A). Same reasoning as
+      Specifications.
+    {%- endcomment -%}
+    <div class="s6cw-acc-item">
+      <button class="s6cw-acc-head" aria-expanded="false" aria-controls="s6cwPanelShip" type="button">
+        Shipping &amp; Returns <span class="s6cw-acc-sign" aria-hidden="true"></span>
+      </button>
+      <div class="s6cw-acc-panel" id="s6cwPanelShip">
+        <div class="s6cw-acc-inner">
+          <p class="s6cw-about-body" style="margin-bottom:14px;">
+            <strong>Shipping.</strong> Items are made to order and typically ship within 3&ndash;4 business days.
+          </p>
+          <p class="s6cw-about-body">
+            <strong>Returns.</strong> Return requests can be made within 30 days of your item's delivery &mdash; no stress, no hassle.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="s6cw-rule">
+
+  {%- comment -%} ===== ENRICHMENT 3: MORE LIKE THIS (stub) =====
+    Production gap from the prototype. Real implementation would
+    query metadata-similar products (overlap on cowork tags) with
+    a category/artist fallback. Until that exists, render four
+    visual placeholders so the page composition is intact.
+  {%- endcomment -%}
+  <section class="s6cw-section">
+    <h2 class="s6cw-h2">More like this</h2>
+    <span class="s6cw-stub-flag">Prototype stub — production gap</span>
+    <div class="s6cw-similar-grid">
+      {%- assign similar_labels = 'Shared tags: cat · line-art · minimalist,Shared tags: warm tones · geometric,Shared tags: mid-century modern · abstract,Shared tags: whimsical · illustration' | split: ',' -%}
+      {%- for label in similar_labels -%}
+        <a class="s6cw-similar-card" href="#">
+          <div class="ph">{{ label }}</div>
+          <div class="cap">Metadata-similar product</div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </section>
+
+</article>
+
+{%- comment -%} ============================================================
+  JSON-LD STRUCTURED DATA
+  Rendered server-side from the same metafields that drive the
+  on-page chips. Consistency rule from the brief: additionalProperty
+  contains exactly the visible chips/swatches — no more, no less.
+  This is the crawl-time copy. No second copy gets generated at
+  runtime because the on-page render and this script share one
+  source of truth (the metafields).
+============================================================ {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": {{ product.featured_image | image_url: width: 1200 | json }},
+  "description": {{ cw_summary | default: product.description | strip_html | json }},
+  "brand": { "@type": "Brand", "name": "Society6" },
+  "category": {{ product.product_type | default: 'Art Print' | json }},
+  {%- if artist_name != blank %}
+  "creator": { "@type": "Person", "name": {{ artist_name | json }} },
+  {%- endif %}
+  "offers": {
+    "@type": "Offer",
+    "price": {{ product.price | money_without_currency | strip_html | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "availability": {%- if product.available -%}"https://schema.org/InStock"{%- else -%}"https://schema.org/OutOfStock"{%- endif -%},
+    "url": {{ shop.url | append: product.url | json }}
+  }{%- if jsonld_props != blank -%},
+  "additionalProperty": [{{ jsonld_props }}]
+  {%- endif %}
+}
+</script>
+
+{%- comment -%} ============================================================
+  THUMB SWITCHER + ACCORDION TOGGLE
+  Scoped to .s6cw-page. Pure DOM toggling — no fetches, no lazy
+  loading, no content removal. Accessible: aria-expanded reflects
+  state.
+============================================================ {%- endcomment -%}
+<script>
+(function(){
+  var page = document.querySelector('.s6cw-page[data-product-id="{{ product.id }}"]');
+  if (!page) return;
+
+  // Thumb switcher
+  var hero = page.querySelector('#s6cwHero');
+  var thumbs = page.querySelectorAll('#s6cwThumbs img');
+  thumbs.forEach(function(t){
+    t.addEventListener('click', function(){
+      var full = t.getAttribute('data-full');
+      if (full && hero) hero.setAttribute('src', full);
+      thumbs.forEach(function(c){ c.classList.remove('is-active'); });
+      t.classList.add('is-active');
+    });
+  });
+
+  // Accordion toggle
+  page.querySelectorAll('.s6cw-acc-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      var panelId = head.getAttribute('aria-controls');
+      var panel = document.getElementById(panelId);
+      if (!panel) return;
+      var open = head.getAttribute('aria-expanded') === 'true';
+      head.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('is-open', !open);
+    });
+  });
+
+  // Static variant chips: pressed-state toggle only (prototype scope).
+  page.querySelectorAll('.s6cw-opt').forEach(function(opt){
+    var picks = opt.querySelectorAll('.s6cw-pick');
+    picks.forEach(function(p){
+      p.addEventListener('click', function(){
+        picks.forEach(function(o){ o.classList.remove('is-active'); o.setAttribute('aria-pressed', 'false'); });
+        p.classList.add('is-active');
+        p.setAttribute('aria-pressed', 'true');
+      });
+    });
+  });
+})();
+</script>
+
+{% stylesheet %}
+/* ============================================================
+   ENRICHED PDP — CSS, ported from the prototype.
+   All classes are .s6cw- prefixed to avoid theme collisions.
+   The typography stack is deliberately self-contained (Georgia
+   serif + Helvetica Neue sans) so the page reads as the refined
+   retail minimalism the prototype defined, not the host theme's
+   tokens. On the production port, swap these CSS variables for
+   the Society6 | Production design system tokens.
+   ============================================================ */
+.s6cw-page {
+  --s6cw-ink: #1a1a1a;
+  --s6cw-ink-soft: #555150;
+  --s6cw-ink-faint: #8c8784;
+  --s6cw-paper: #ffffff;
+  --s6cw-paper-warm: #f7f4f0;
+  --s6cw-line: #e6e1da;
+  --s6cw-accent: #c8612e;
+  --s6cw-accent-soft: #f0e3d8;
+  --s6cw-radius: 10px;
+  --s6cw-maxw: 1180px;
+  --s6cw-serif: 'Georgia', 'Times New Roman', serif;
+  --s6cw-sans: 'Helvetica Neue', 'Arial', sans-serif;
+
+  font-family: var(--s6cw-sans);
+  color: var(--s6cw-ink);
+  background: var(--s6cw-paper);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.s6cw-page * { box-sizing: border-box; }
+.s6cw-page img { max-width: 100%; display: block; }
+.s6cw-page a { color: inherit; }
+
+.s6cw-wrap { max-width: var(--s6cw-maxw); margin: 0 auto; padding: 0 16px; }
+
+/* breadcrumb */
+.s6cw-crumb {
+  font-size: 12px;
+  color: var(--s6cw-ink-faint);
+  padding: 14px 0;
+  letter-spacing: 0.03em;
+}
+.s6cw-crumb a { text-decoration: none; }
+.s6cw-crumb a:hover { color: var(--s6cw-accent); }
+.s6cw-crumb span { margin: 0 6px; }
+
+/* product layout — single column mobile, two column ≥860px */
+.s6cw-product { display: block; padding-bottom: 8px; }
+@media (min-width: 860px) {
+  .s6cw-product {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: start;
+  }
+}
+
+/* gallery */
+.s6cw-gallery-main {
+  background: var(--s6cw-paper-warm);
+  border-radius: var(--s6cw-radius);
+  overflow: hidden;
+  border: 1px solid var(--s6cw-line);
+}
+.s6cw-gallery-main img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+.s6cw-thumbs { display: flex; gap: 10px; margin-top: 10px; }
+.s6cw-thumbs img {
+  width: 72px; height: 72px; object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--s6cw-line);
+  cursor: pointer;
+  transition: border-color 0.18s ease;
+}
+.s6cw-thumbs img:hover,
+.s6cw-thumbs img.is-active { border-color: var(--s6cw-accent); }
+@media (min-width: 860px) {
+  .s6cw-gallery { position: sticky; top: 24px; }
+}
+
+/* buy column */
+.s6cw-buy { padding-top: 24px; }
+@media (min-width: 860px) { .s6cw-buy { padding-top: 0; } }
+
+.s6cw-title {
+  font-family: var(--s6cw-serif);
+  font-size: 30px;
+  line-height: 1.18;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+@media (min-width: 860px) { .s6cw-title { font-size: 36px; } }
+
+.s6cw-byline {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+}
+.s6cw-byline a, .s6cw-byline-name {
+  color: var(--s6cw-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.s6cw-byline a:hover { text-decoration: underline; }
+
+.s6cw-price {
+  font-size: 24px;
+  margin: 18px 0 4px;
+  font-weight: 600;
+}
+
+.s6cw-opt { margin-top: 20px; }
+.s6cw-opt-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--s6cw-ink-faint);
+  margin-bottom: 8px;
+}
+.s6cw-opt-label b { color: var(--s6cw-ink); font-weight: 600; }
+.s6cw-chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.s6cw-pick {
+  border: 1px solid var(--s6cw-line);
+  background: var(--s6cw-paper);
+  border-radius: 6px;
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  color: var(--s6cw-ink);
+}
+.s6cw-pick:hover { border-color: var(--s6cw-ink-soft); }
+.s6cw-pick.is-active {
+  border-color: var(--s6cw-ink);
+  background: var(--s6cw-ink);
+  color: var(--s6cw-paper);
+}
+
+.s6cw-cart-form { margin: 0; }
+.s6cw-cart {
+  margin-top: 24px;
+  width: 100%;
+  background: var(--s6cw-ink);
+  color: var(--s6cw-paper);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s ease;
+}
+.s6cw-cart:hover { background: var(--s6cw-accent); }
+.s6cw-cart[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+.s6cw-reassure {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--s6cw-ink-faint);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* aesthetic block */
+.s6cw-aesthetic {
+  margin-top: 20px;
+  padding: 16px 16px 14px;
+  background: var(--s6cw-paper-warm);
+  border: 1px solid var(--s6cw-line);
+  border-radius: var(--s6cw-radius);
+}
+.s6cw-aesthetic h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--s6cw-ink-faint);
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+.s6cw-attr { margin-bottom: 9px; }
+.s6cw-attr:last-child { margin-bottom: 0; }
+.s6cw-attr-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--s6cw-ink-faint);
+  margin-bottom: 5px;
+}
+.s6cw-tag {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 12.5px;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: var(--s6cw-paper);
+  border: 1px solid var(--s6cw-line);
+  color: var(--s6cw-ink);
+  margin: 0 5px 5px 0;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.s6cw-tag:hover { border-color: var(--s6cw-accent); color: var(--s6cw-accent); }
+
+.s6cw-swatch-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.s6cw-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.s6cw-swatch { text-align: center; }
+.s6cw-swatch-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--s6cw-line);
+  margin-bottom: 3px;
+}
+.s6cw-swatch-name {
+  font-size: 10px;
+  color: var(--s6cw-ink-faint);
+  letter-spacing: 0.02em;
+}
+.s6cw-palette-note {
+  font-size: 11.5px;
+  color: var(--s6cw-ink-faint);
+  font-style: italic;
+}
+
+/* sections + rules */
+.s6cw-section {
+  max-width: var(--s6cw-maxw);
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+.s6cw-rule {
+  max-width: var(--s6cw-maxw);
+  margin: 8px auto 0;
+  border: none;
+  border-top: 1px solid var(--s6cw-line);
+}
+.s6cw-h2 {
+  font-family: var(--s6cw-serif);
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0 0 16px;
+}
+
+.s6cw-about-body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--s6cw-ink);
+  max-width: 640px;
+  margin: 0;
+}
+.s6cw-ai-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--s6cw-ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.s6cw-ai-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--s6cw-accent);
+  flex: none;
+}
+
+/* artist row */
+.s6cw-artist {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 4px;
+  padding: 20px;
+  background: var(--s6cw-paper-warm);
+  border-radius: var(--s6cw-radius);
+  max-width: 640px;
+}
+.s6cw-artist img {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  flex: none;
+}
+.s6cw-artist-name { font-weight: 600; font-size: 15px; }
+.s6cw-artist-bio {
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+  margin-top: 3px;
+  white-space: pre-line;
+}
+.s6cw-artist-link {
+  font-size: 13px;
+  color: var(--s6cw-accent);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 7px;
+}
+.s6cw-artist-link:hover { text-decoration: underline; }
+
+/* specs list */
+.s6cw-specs { list-style: none; padding: 0; max-width: 640px; margin: 0; }
+.s6cw-specs li {
+  font-size: 14px;
+  color: var(--s6cw-ink-soft);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--s6cw-line);
+}
+.s6cw-specs li:last-child { border-bottom: none; }
+
+/* accordion */
+.s6cw-accordion {
+  max-width: var(--s6cw-maxw);
+  margin: 0 auto;
+  padding: 8px 16px 0;
+}
+/* The rule directly below the accordion sits flush against the last item,
+   so the gap below "Shipping & Returns" matches the 22px inter-item spacing.
+   Scoped via adjacent-sibling so the OTHER .s6cw-rule (between the product
+   grid and the accordion) keeps its 8px breathing room. */
+.s6cw-accordion + .s6cw-rule { margin-top: 0; }
+.s6cw-acc-item { border-bottom: 1px solid var(--s6cw-line); }
+.s6cw-acc-item:first-child { border-top: 1px solid var(--s6cw-line); }
+.s6cw-acc-item:last-child { border-bottom: none; } /* prevents stacking with the section <hr> below */
+.s6cw-acc-head {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: var(--s6cw-serif);
+  font-size: 21px;
+  color: var(--s6cw-ink);
+  text-align: left;
+  padding: 22px 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.s6cw-acc-head:hover { color: var(--s6cw-accent); }
+.s6cw-acc-sign {
+  flex: none;
+  width: 22px; height: 22px;
+  position: relative;
+}
+.s6cw-acc-sign::before,
+.s6cw-acc-sign::after {
+  content: "";
+  position: absolute;
+  background: var(--s6cw-ink-soft);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.s6cw-acc-sign::before {
+  top: 50%; left: 0; right: 0; height: 1.5px;
+  transform: translateY(-50%);
+}
+.s6cw-acc-sign::after {
+  left: 50%; top: 0; bottom: 0; width: 1.5px;
+  transform: translateX(-50%);
+}
+.s6cw-acc-head[aria-expanded="true"] .s6cw-acc-sign::after {
+  transform: translateX(-50%) scaleY(0);
+  opacity: 0;
+}
+.s6cw-acc-head[aria-expanded="true"] .s6cw-acc-sign::before {
+  background: var(--s6cw-accent);
+}
+.s6cw-acc-panel {
+  overflow: hidden;
+  max-height: 0;
+  min-height: 0;
+  transition: max-height 0.28s ease;
+}
+.s6cw-acc-panel.is-open { max-height: 1600px; }
+/* Closed panel contributes zero height — no padding, no min-height. */
+.s6cw-acc-inner { padding: 0; }
+/* Padding only kicks in when the panel is open. */
+.s6cw-acc-panel.is-open .s6cw-acc-inner { padding: 2px 4px 26px; }
+
+/* more like this */
+.s6cw-similar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 640px) {
+  .s6cw-similar-grid { grid-template-columns: repeat(4, 1fr); }
+}
+.s6cw-similar-card {
+  border: 1px solid var(--s6cw-line);
+  border-radius: var(--s6cw-radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.s6cw-similar-card .ph {
+  aspect-ratio: 1/1;
+  background: repeating-linear-gradient(
+    45deg, var(--s6cw-paper-warm), var(--s6cw-paper-warm) 11px,
+    var(--s6cw-accent-soft) 11px, var(--s6cw-accent-soft) 22px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--s6cw-ink-faint);
+  text-align: center; padding: 10px;
+}
+.s6cw-similar-card .cap { padding: 10px 12px; font-size: 12.5px; }
+
+.s6cw-stub-flag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s6cw-accent);
+  border: 1px dashed var(--s6cw-accent);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 14px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cowork Enriched PDP",
+  "tag": "section",
+  "class": "s6cw-section-wrapper",
+  "enabled_on": { "templates": ["product"] },
+  "settings": []
+}
+{% endschema %}

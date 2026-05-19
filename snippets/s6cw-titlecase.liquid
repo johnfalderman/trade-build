@@ -1,0 +1,36 @@
+{%- comment -%}
+  snippets/s6cw-titlecase.liquid
+  Title-cases a raw Cowork token for display, preserving the original
+  separators. Handles hyphens AND spaces, so:
+    line-art            -> Line Art (visual) actually -> Line-Art
+    mid-century modern  -> Mid-Century Modern
+    hand-drawn          -> Hand-Drawn
+
+  Note: hyphens are kept on output. Prototype labels chips with the
+  hyphen intact ("Hand-Drawn", "Mid-Century Modern"), matching that.
+
+  Usage:
+    {%- capture cased -%}{%- render 's6cw-titlecase', token: 'mid-century modern' -%}{%- endcapture -%}
+{%- endcomment -%}
+{%- liquid
+  assign words = token | split: ' '
+  assign out = ''
+  for word in words
+    assign sub = word | split: '-'
+    assign wcased = ''
+    for s in sub
+      assign capped = s | capitalize
+      if forloop.first
+        assign wcased = capped
+      else
+        assign wcased = wcased | append: '-' | append: capped
+      endif
+    endfor
+    if forloop.first
+      assign out = wcased
+    else
+      assign out = out | append: ' ' | append: wcased
+    endif
+  endfor
+-%}
+{{- out -}}
