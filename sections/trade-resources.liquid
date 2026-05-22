@@ -1,0 +1,351 @@
+{%- comment -%}
+  sections/trade-resources.liquid
+  "Resources for Design Professionals" header with two cards side by side:
+  - Webinar card: image, tag, heading, description, email capture form
+    (same form logic as trade-webinar.liquid — customer tagged trade-webinar-lead)
+  - Lookbook card: image, tag, heading, description, button → #trade-lookbook
+
+  This section replaces trade-webinar.liquid in the page order.
+  trade-lookbook-modal.liquid still sits separately in the template to
+  render the modal itself; the lookbook card here is just the CTA surface.
+
+  Production gap: form lead destination is Shopify customer records.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="s6trade-resources section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+
+  {%- if section.settings.eyebrow != blank -%}
+    <p class="s6trade-resources__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+  {%- endif -%}
+
+  <div class="s6trade-resources__cards">
+
+    <!-- Webinar card -->
+    <div class="s6trade-resources__card">
+      {%- if section.settings.webinar_image != blank -%}
+        <div class="s6trade-resources__card-img-wrap">
+          <img
+            src="{{ section.settings.webinar_image | image_url: width: 800 }}"
+            alt="{{ section.settings.webinar_image.alt | default: section.settings.webinar_heading | escape }}"
+            class="s6trade-resources__card-img"
+            width="{{ section.settings.webinar_image.width }}"
+            height="{{ section.settings.webinar_image.height }}"
+            loading="lazy"
+          >
+        </div>
+      {%- elsif section.settings.webinar_image_filename != blank -%}
+        <div class="s6trade-resources__card-img-wrap">
+          <img
+            src="{{ section.settings.webinar_image_filename | file_url }}"
+            alt="{{ section.settings.webinar_heading | escape }}"
+            class="s6trade-resources__card-img"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+
+      <div class="s6trade-resources__card-body">
+        {%- if section.settings.webinar_tag != blank -%}
+          <p class="s6trade-resources__card-tag">{{ section.settings.webinar_tag | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.webinar_heading != blank -%}
+          <h2 class="s6trade-resources__card-heading">{{ section.settings.webinar_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.webinar_desc != blank -%}
+          <div class="s6trade-resources__card-desc">{{ section.settings.webinar_desc }}</div>
+        {%- endif -%}
+
+        {%- form 'customer', class: 's6trade-resources__form' -%}
+          <input type="hidden" name="contact[tags]" value="trade-webinar-lead">
+
+          {%- if form.posted_successfully? -%}
+            <div class="s6trade-resources__success">
+              <p class="s6trade-resources__success-text">{{ section.settings.webinar_success_text | escape }}</p>
+              {%- if section.settings.webinar_url != blank -%}
+                <a
+                  class="s6trade-resources__success-link"
+                  href="{{ section.settings.webinar_url }}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{- section.settings.webinar_success_link_label | escape -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            <label class="s6trade-resources__field">
+              <span class="s6trade-resources__field-label">{{ section.settings.webinar_field_label | escape }}</span>
+              <input
+                type="email"
+                name="contact[email]"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                required
+              >
+            </label>
+
+            {%- if form.errors -%}
+              <div class="s6trade-resources__error" role="alert">
+                {{- form.errors | default_errors -}}
+              </div>
+            {%- endif -%}
+
+            <button type="submit" class="s6trade-resources__submit">
+              {{ section.settings.webinar_submit_label | escape }}
+            </button>
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- if section.settings.webinar_fineprint != blank -%}
+          <p class="s6trade-resources__fineprint">{{ section.settings.webinar_fineprint | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Lookbook card -->
+    <div class="s6trade-resources__card">
+      {%- if section.settings.lookbook_image != blank -%}
+        <div class="s6trade-resources__card-img-wrap">
+          <img
+            src="{{ section.settings.lookbook_image | image_url: width: 800 }}"
+            alt="{{ section.settings.lookbook_image.alt | default: section.settings.lookbook_heading | escape }}"
+            class="s6trade-resources__card-img"
+            width="{{ section.settings.lookbook_image.width }}"
+            height="{{ section.settings.lookbook_image.height }}"
+            loading="lazy"
+          >
+        </div>
+      {%- else -%}
+        <div class="s6trade-resources__card-img-wrap s6trade-resources__card-img-wrap--placeholder"></div>
+      {%- endif -%}
+
+      <div class="s6trade-resources__card-body">
+        {%- if section.settings.lookbook_tag != blank -%}
+          <p class="s6trade-resources__card-tag">{{ section.settings.lookbook_tag | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.lookbook_heading != blank -%}
+          <h2 class="s6trade-resources__card-heading">{{ section.settings.lookbook_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.lookbook_desc != blank -%}
+          <div class="s6trade-resources__card-desc">{{ section.settings.lookbook_desc }}</div>
+        {%- endif -%}
+        {%- if section.settings.lookbook_cta_label != blank -%}
+          <a class="s6trade-resources__cta" href="#trade-lookbook">
+            {{- section.settings.lookbook_cta_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .s6trade-resources {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .s6trade-resources__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0 0 40px;
+    text-align: center;
+  }
+  .s6trade-resources__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-resources__cards {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+  }
+  .s6trade-resources__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .s6trade-resources__card-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--color-border);
+    margin-block-end: 24px;
+  }
+  .s6trade-resources__card-img-wrap--placeholder {
+    background: var(--color-border);
+  }
+  .s6trade-resources__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .s6trade-resources__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .s6trade-resources__card-tag {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .s6trade-resources__card-heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-resources__card-desc {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-foreground);
+  }
+  .s6trade-resources__card-desc :where(p) { margin: 0; }
+  .s6trade-resources__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-block-start: 8px;
+  }
+  .s6trade-resources__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .s6trade-resources__field-label {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+  .s6trade-resources__field input {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--color-foreground);
+  }
+  .s6trade-resources__field input:focus {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: -2px;
+  }
+  .s6trade-resources__submit,
+  .s6trade-resources__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+    border-radius: 0;
+    padding: 14px 28px;
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    margin-block-start: 4px;
+  }
+  .s6trade-resources__submit:hover,
+  .s6trade-resources__cta:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+    border-color: var(--color-primary-button-hover-border);
+  }
+  .s6trade-resources__error {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    color: #a33;
+    line-height: 1.4;
+  }
+  .s6trade-resources__success {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .s6trade-resources__success-text {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .s6trade-resources__success-link {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-resources__fineprint {
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--color-foreground-muted);
+    margin: 4px 0 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — Resources",
+  "tag": "section",
+  "class": "s6trade-resources-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "header", "content": "Section label" },
+    { "type": "text", "id": "eyebrow", "label": "Section label", "default": "RESOURCES FOR DESIGN PROFESSIONALS" },
+    { "type": "header", "content": "Webinar card" },
+    { "type": "image_picker", "id": "webinar_image",         "label": "Webinar image" },
+    { "type": "text",         "id": "webinar_image_filename","label": "Webinar image filename (SVG fallback)", "info": "Filename only, e.g. trade-webinar-title-card.svg. Used when image picker doesn't support SVG." },
+    { "type": "text",         "id": "webinar_tag",           "label": "Webinar card tag",    "default": "On-Demand Webinar" },
+    { "type": "text",         "id": "webinar_heading",       "label": "Webinar heading",     "default": "Watch: A Refined Workflow for Art Sourcing." },
+    { "type": "richtext",     "id": "webinar_desc",          "label": "Webinar description", "default": "<p>An on-demand session with DesignSpec on building a calmer, clearer way to source art for a project — from the first client brief to the final install.</p>" },
+    { "type": "text",         "id": "webinar_field_label",   "label": "Email field label",   "default": "Email address" },
+    { "type": "text",         "id": "webinar_submit_label",  "label": "Submit button",       "default": "Watch the Session" },
+    { "type": "text",         "id": "webinar_fineprint",     "label": "Fineprint",           "default": "By signing up, you agree to receive trade emails from Society6. Unsubscribe anytime." },
+    { "type": "text",         "id": "webinar_success_text",      "label": "Success text",         "default": "You're in. Watch the session whenever you're ready." },
+    { "type": "text",         "id": "webinar_success_link_label","label": "Success link label",    "default": "Watch the session →" },
+    { "type": "text",         "id": "webinar_url",               "label": "Webinar URL",           "default": "https://my.demio.com/ref/NYp9TerTRo0euV2d" },
+    { "type": "header", "content": "Lookbook card" },
+    { "type": "image_picker", "id": "lookbook_image",     "label": "Lookbook image" },
+    { "type": "text",         "id": "lookbook_tag",       "label": "Lookbook card tag",    "default": "Free Download" },
+    { "type": "text",         "id": "lookbook_heading",   "label": "Lookbook heading",     "default": "The 2026 Trade Lookbook" },
+    { "type": "richtext",     "id": "lookbook_desc",      "label": "Lookbook description", "default": "<p>Curated collections, real project case studies, and a complete product reference guide — every size, material, and frame option in one place.</p>" },
+    { "type": "text",         "id": "lookbook_cta_label", "label": "Lookbook CTA label",   "default": "Download Lookbook" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ]
+}
+{% endschema %}

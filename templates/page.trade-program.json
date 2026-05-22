@@ -1,216 +1,138 @@
 {
   "sections": {
-    "main": {
-      "type": "media-with-content",
+    "trade-hero": {
+      "type": "trade-hero",
       "blocks": {
-        "media": {
-          "type": "_media-without-appearance",
-          "static": true,
+        "benefit-pricing": {
+          "type": "benefit",
           "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/photo-1556228453-efd6c1ff04f6.jpg",
-            "image_position": "cover"
+            "icon": "tag",
+            "label": "TRADE PRICING",
+            "body": "Exclusive pricing for trade professionals."
           }
         },
-        "content": {
-          "type": "_content-without-appearance",
-          "static": true,
+        "benefit-curation": {
+          "type": "benefit",
           "settings": {
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 20
-          },
-          "blocks": {
-            "eyebrow": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Society6 Trade Program</p>",
-                "type_preset": "h6",
-                "alignment": "left",
-                "font": "var(--font-accent--family)",
-                "font_size": "0.85rem",
-                "case": "uppercase",
-                "letter_spacing": "0.18em"
-              }
-            },
-            "headline": {
-              "type": "text",
-              "settings": {
-                "text": "<h1>Art for Every Project.<br>Sourced, Curated, Delivered.</h1>",
-                "type_preset": "h1",
-                "alignment": "left",
-                "max_width": "narrow",
-                "font": "var(--font-heading--family)"
-              }
-            },
-            "subhead": {
-              "type": "text",
-              "settings": {
-                "text": "<p>30% trade pricing on handpicked Wall Art, Home Decor, and lifestyle. Source direct or have our curation team build a collection for your project.</p>",
-                "type_preset": "rte",
-                "alignment": "left",
-                "max_width": "normal"
-              }
-            },
-            "button_primary": {
-              "type": "button",
-              "settings": {
-                "label": "Join Trade Program",
-                "link": "shopify://pages/trade-application"
-              }
-            },
-            "button_secondary": {
-              "type": "button",
-              "settings": {
-                "label": "Download 2026 Trade Lookbook",
-                "link": "#trade-lookbook",
-                "style_class": "button-secondary"
-              }
-            }
-          },
-          "block_order": ["eyebrow", "headline", "subhead", "button_primary", "button_secondary"]
-        }
-      },
-      "settings": {
-        "media_position": "right",
-        "media_width": "medium",
-        "media_height": "auto",
-        "section_width": "page-width",
-        "extend_media": false,
-        "color_scheme": "scheme-trade-cream",
-        "padding-block-start": 44,
-        "padding-block-end": 44
-      }
-    },
-    "two-path": {
-      "type": "trade-two-path",
-      "blocks": {
-        "self-serve-card": {
-          "type": "trade-path-card",
-          "settings": {
-            "tag": "Self-Serve",
-            "heading": "Source, choose, ship.",
-            "body": "<p>Explore the handpicked catalog at your own pace. 30% trade discount applies automatically — no codes, no minimums, no waiting. Add to cart and go.</p>",
-            "button_label": "Join Trade Program",
-            "button_link": "shopify://pages/trade-application"
+            "icon": "palette",
+            "label": "CURATION SUPPORT",
+            "body": "Personalized art curation to match your project vision."
           }
         },
-        "full-service-card": {
-          "type": "trade-path-card",
+        "benefit-domestic": {
+          "type": "benefit",
           "settings": {
-            "tag": "Full-Service",
-            "heading": "We do the sourcing for you.",
-            "body": "<p>Share your mood board and project brief. Our curation team does the sourcing, recommends framing and sizing, and delivers a custom collection for your review. You approve, we produce.</p>",
-            "button_label": "Download 2026 Trade Lookbook",
-            "button_link": "#trade-lookbook"
+            "icon": "house",
+            "label": "DOMESTIC PRODUCTION",
+            "body": "Quality products made in the U.S., delivered efficiently."
+          }
+        },
+        "benefit-multiloc": {
+          "type": "benefit",
+          "settings": {
+            "icon": "grid",
+            "label": "MULTI-LOCATION PROGRAMS",
+            "body": "Streamlined solutions for single or multiple properties."
           }
         }
       },
-      "block_order": ["self-serve-card", "full-service-card"],
+      "block_order": ["benefit-pricing", "benefit-curation", "benefit-domestic", "benefit-multiloc"],
       "settings": {
-        "eyebrow": "Your Way, Your Pace",
-        "heading": "Two ways to source curated art for your project.",
-        "subhead": "<p>Society6 is a curated art retailer — we handpick artists and designs across Wall Art, Home Decor, and lifestyle products, unlike open marketplaces with unlimited uploads. Run with it yourself, or hand the brief to our curation team. Either way, your 30% trade discount applies.</p>",
-        "section_width": "page-width",
+        "heading": "Curated art for every kind of space.",
+        "subhead": "Exclusive trade pricing, expert curation support, and scalable sourcing for hospitality, healthcare, residential, and commercial projects.",
+        "cta_label": "JOIN TRADE PROGRAM",
+        "cta_link": "shopify://pages/trade-application",
+        "section_width": "full-width",
         "color_scheme": "scheme-trade-cream"
       }
     },
-    "benefits": {
-      "type": "trade-benefits",
+    "trade-how-we-work": {
+      "type": "trade-how-we-work",
       "blocks": {
-        "b1": { "type": "trade-benefit", "settings": { "icon": "percent", "heading": "30% off everything", "body": "<p>Browse and buy in minutes — no approval gate, no minimums.</p>" } },
-        "b2": { "type": "trade-benefit", "settings": { "icon": "curate", "heading": "We do the sourcing for you", "body": "<p>We'll build a custom collection to your brief, free of charge.</p>" } },
-        "b3": { "type": "trade-benefit", "settings": { "icon": "invoice", "heading": "One order, one invoice", "body": "<p>Consolidated POs across multiple pieces, artists, and frame styles.</p>" } },
-        "b4": { "type": "trade-benefit", "settings": { "icon": "ship", "heading": "Ships from the U.S.", "body": "<p>Faster timelines, easier returns, no import complexity.</p>" } },
-        "b5": { "type": "trade-benefit", "settings": { "icon": "frame", "heading": "Frame to spec", "body": "<p>Custom sizes and finishes that fit your exact space.</p>" } },
-        "b6": { "type": "trade-benefit", "settings": { "icon": "person", "heading": "A real person on your project", "body": "<p>Whether you're browsing solo or working with our curation team.</p>" } }
-      },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"],
-      "settings": {
-        "eyebrow": "What's Included",
-        "heading": "Built for the way designers actually work.",
-        "section_width": "page-width",
-        "color_scheme": "scheme-trade-cream"
-      }
-    },
-    "how-it-works": {
-      "type": "trade-how-it-works",
-      "blocks": {
-        "ss1": { "type": "_trade-how-step", "settings": { "number": "1", "heading": "Apply for trade access", "body": "<p>Quick approval, then your discount is live.</p>" } },
-        "ss2": { "type": "_trade-how-step", "settings": { "number": "2", "heading": "Browse 1M+ works", "body": "<p>Filter by style, color, medium, subject. Built to be fast.</p>" } },
-        "ss3": { "type": "_trade-how-step", "settings": { "number": "3", "heading": "Checkout with 30% off", "body": "<p>Discount auto-applies. Ships from the U.S.</p>" } },
-        "fs1": { "type": "_trade-how-step", "settings": { "number": "1", "heading": "Share your project", "body": "<p>Tell us the space, the vibe, the timeline.</p>" } },
-        "fs2": { "type": "_trade-how-step", "settings": { "number": "2", "heading": "We build your collection", "body": "<p>Our curation team matches your vision.</p>" } },
-        "fs3": { "type": "_trade-how-step", "settings": { "number": "3", "heading": "Review, approve, done", "body": "<p>We produce and ship from the U.S. with your 30% discount.</p>" } }
-      },
-      "block_order": ["ss1", "ss2", "ss3", "fs1", "fs2", "fs3"],
-      "settings": {
-        "eyebrow": "How It Works",
-        "heading": "Pick your path. Both end with art on the wall.",
-        "col1_title": "Self-Serve Path",
-        "col1_subhead": "For when you want full control",
-        "col1_cta_label": "Join Trade Program",
-        "col1_cta_link": "shopify://pages/trade-application",
-        "col2_title": "Full-Service Path",
-        "col2_subhead": "For when you want it done for you",
-        "col2_cta_label": "Request a Curated Collection",
-        "col2_cta_link": "#",
-        "section_width": "page-width",
-        "color_scheme": "scheme-trade-cream"
-      }
-    },
-    "social-proof": {
-      "type": "trade-social-proof",
-      "blocks": {
-        "q1": {
-          "type": "_trade-quote",
+        "step-source": {
+          "type": "step",
           "settings": {
-            "quote": "<p>Artwork is the layer that makes it all feel complete.</p>",
-            "name": "Paty Duran, Founder",
-            "title": "Hybrid Creative",
-            "firm": "NiMo, Jupiter FL"
+            "label": "SOURCE",
+            "body": "Explore thousands of independent artist designs across art prints, wall decor, textiles, and more."
           }
         },
-        "q2": {
-          "type": "_trade-quote",
+        "step-curate": {
+          "type": "step",
           "settings": {
-            "quote": "<p>Society6 became a one-stop-shop for everything we needed — the costs are phenomenal, the quality is great, and there hasn't been one thing I couldn't find conceptually on the site.</p>",
-            "name": "Jes Gordon, Co-Founder",
-            "title": "Proper Fun Events",
-            "firm": "NYC"
+            "label": "CURATE",
+            "body": "Our team helps you find the right pieces that fit your style, budget, and project goals."
           }
         },
-        "q3": {
-          "type": "_trade-quote",
+        "step-scale": {
+          "type": "step",
           "settings": {
-            "quote": "<p>Society6 became my favorite source because the wooden panels don't reflect, are affordable, and perfect for vacation homes.</p>",
-            "name": "Connie, Interior Designer",
-            "title": "Wolfgang Pichler · Desert STR Projects, Joshua Tree & Palm Springs",
-            "firm": ""
+            "label": "SCALE",
+            "body": "We handle production and delivery across multiple locations with consistent quality and ease."
           }
         }
       },
-      "block_order": ["q1", "q2", "q3"],
+      "block_order": ["step-source", "step-curate", "step-scale"],
       "settings": {
-        "eyebrow": "From the Field",
-        "heading": "What our trade members are saying.",
+        "eyebrow": "HOW WE WORK",
+        "heading": "Sourcing art should be simple (and inspiring).",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
     },
-    "clients": {
-      "type": "trade-clients",
+    "trade-project-types": {
+      "type": "trade-project-types",
       "blocks": {
-        "c1": { "type": "trade-client-logo", "settings": { "name": "Hybrid Creative" } },
-        "c2": { "type": "trade-client-logo", "settings": { "name": "Proper Fun Events" } },
-        "c3": { "type": "trade-client-logo", "settings": { "name": "Wolfgang Pichler" } },
-        "c4": { "type": "trade-client-logo", "settings": { "name": "The Desert Social" } },
-        "c5": { "type": "trade-client-logo", "settings": { "name": "Sun at Six" } },
-        "c6": { "type": "trade-client-logo", "settings": { "name": "Phanomen Design" } }
+        "tile-hospitality": { "type": "tile", "settings": { "label": "HOSPITALITY" } },
+        "tile-healthcare":  { "type": "tile", "settings": { "label": "HEALTHCARE" } },
+        "tile-residential": { "type": "tile", "settings": { "label": "RESIDENTIAL" } },
+        "tile-str":         { "type": "tile", "settings": { "label": "SHORT-TERM RENTALS" } },
+        "tile-commercial":  { "type": "tile", "settings": { "label": "COMMERCIAL" } }
       },
-      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6"],
+      "block_order": ["tile-hospitality", "tile-healthcare", "tile-residential", "tile-str", "tile-commercial"],
       "settings": {
-        "label": "Trusted by designers across hospitality, restaurant, residential, and event production",
+        "eyebrow": "DESIGNED FOR EVERY TYPE OF PROJECT",
+        "cta_text": "Download Our Project Guide >",
+        "section_width": "page-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
+    "trade-project-guide-modal": {
+      "type": "trade-project-guide-modal",
+      "settings": {}
+    },
+    "trade-curation-callout": {
+      "type": "trade-curation-callout",
+      "blocks": {
+        "check-artwork":  { "type": "check_item", "settings": { "text": "Artwork recommendations" } },
+        "check-framing":  { "type": "check_item", "settings": { "text": "Custom framing" } },
+        "check-sourcing": { "type": "check_item", "settings": { "text": "Variable sourcing support" } }
+      },
+      "block_order": ["check-artwork", "check-framing", "check-sourcing"],
+      "settings": {
+        "eyebrow": "CURATION SUPPORT",
+        "heading": "Curation support designed around your project.",
+        "body": "From boutique spaces to large-scale rollouts, our curation team helps you source artwork that brings your vision to life.",
+        "cta_label": "JOIN TRADE PROGRAM",
+        "cta_link": "shopify://pages/trade-application",
+        "section_width": "full-width",
+        "color_scheme": "scheme-trade-cream"
+      }
+    },
+    "trade-multi-location": {
+      "type": "trade-multi-location",
+      "blocks": {
+        "ml-check-1": { "type": "check_item", "settings": { "text": "Standardized sourcing" } },
+        "ml-check-2": { "type": "check_item", "settings": { "text": "Coordinated production" } },
+        "ml-check-3": { "type": "check_item", "settings": { "text": "Consistent quality & timelines" } },
+        "ml-check-4": { "type": "check_item", "settings": { "text": "Simplified ordering & delivery" } }
+      },
+      "block_order": ["ml-check-1", "ml-check-2", "ml-check-3", "ml-check-4"],
+      "settings": {
+        "eyebrow": "MULTI-LOCATION PROGRAMS",
+        "heading": "Art programs that scale with you.",
+        "body": "We make it easy to maintain a cohesive look across multiple locations with:",
+        "image_1_label": "HEADQUARTERS",
+        "image_2_label": "MULTIPLE LOCATIONS",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
@@ -263,66 +185,30 @@
       },
       "block_order": ["cs-hybrid", "cs-wolfgang", "cs-properfun"],
       "settings": {
-        "eyebrow": "Case Studies",
-        "heading": "Real projects, real designers.",
-        "subhead": "<p>See how trade members across hospitality, residential, and events use Society6.</p>",
+        "eyebrow": "REAL PROJECTS. REAL IMPACT.",
+        "heading": "",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
     },
-    "explore": {
-      "type": "trade-explore-blocks",
-      "blocks": {
-        "e1": {
-          "type": "trade-explore-block",
-          "settings": {
-            "title": "Trade Program Styles",
-            "subtitle": "Browse by aesthetic",
-            "link": "shopify://pages/trade-program-styles",
-            "image": "shopify://shop_images/photo-1493809842364-78817add7ffb.jpg"
-          }
-        },
-        "e2": {
-          "type": "trade-explore-block",
-          "settings": {
-            "title": "Our Favorite Themes",
-            "subtitle": "Curated mood collections",
-            "link": "shopify://pages/trade-program-themes",
-            "image": "shopify://shop_images/photo-1567538096630-e0c55bd6374c.jpg"
-          }
-        },
-        "e3": {
-          "type": "trade-explore-block",
-          "settings": {
-            "title": "Trade Catalog",
-            "subtitle": "Download the PDF lookbook",
-            "link": "#trade-lookbook",
-            "image": "shopify://shop_images/photo-1505691938895-1758d7feb511.jpg"
-          }
-        }
-      },
-      "block_order": ["e1", "e2", "e3"],
+    "trade-resources": {
+      "type": "trade-resources",
       "settings": {
-        "eyebrow": "Explore",
-        "heading": "Start with what fits your project.",
-        "section_width": "page-width",
-        "color_scheme": "scheme-trade-cream"
-      }
-    },
-    "webinar": {
-      "type": "trade-webinar",
-      "settings": {
-        "eyebrow": "On-Demand Webinar",
-        "heading": "Watch: A Refined Workflow for Art Sourcing.",
-        "description": "<p>An on-demand session with DesignSpec on building a calmer, clearer way to source art for a project — from the first client brief to the final install.</p>",
-        "field_label": "Email address",
-        "submit_label": "Watch the Session",
-        "fineprint": "By signing up, you agree to receive trade emails from Society6. Unsubscribe anytime.",
-        "success_text": "You're in. Watch the session whenever you're ready.",
-        "success_link_label": "Watch the session →",
+        "eyebrow": "RESOURCES FOR DESIGN PROFESSIONALS",
+        "webinar_image_filename": "trade-webinar-title-card.svg",
+        "webinar_tag": "On-Demand Webinar",
+        "webinar_heading": "Watch: A Refined Workflow for Art Sourcing.",
+        "webinar_desc": "<p>An on-demand session with DesignSpec on building a calmer, clearer way to source art for a project — from the first client brief to the final install.</p>",
+        "webinar_field_label": "Email address",
+        "webinar_submit_label": "Watch the Session",
+        "webinar_fineprint": "By signing up, you agree to receive trade emails from Society6. Unsubscribe anytime.",
+        "webinar_success_text": "You're in. Watch the session whenever you're ready.",
+        "webinar_success_link_label": "Watch the session →",
         "webinar_url": "https://my.demio.com/ref/NYp9TerTRo0euV2d",
-        "image_filename": "trade-webinar-title-card.svg",
-        "image_alt": "Society6 Trade and DesignSpec on-demand webinar: A Refined Workflow for Art Sourcing.",
+        "lookbook_tag": "Free Download",
+        "lookbook_heading": "The 2026 Trade Lookbook",
+        "lookbook_desc": "<p>Curated collections, real project case studies, and a complete product reference guide — every size, material, and frame option in one place.</p>",
+        "lookbook_cta_label": "Download Lookbook",
         "section_width": "page-width",
         "color_scheme": "scheme-trade-cream"
       }
@@ -331,52 +217,29 @@
       "type": "trade-lookbook-modal",
       "settings": {}
     },
-    "final-cta": {
+    "trade-final-cta": {
       "type": "trade-final-cta",
       "settings": {
-        "eyebrow": "Ready When You Are",
-        "heading": "Apply for trade access in under two minutes.",
-        "subhead": "<p>Quick approval, no minimums, and your 30% discount goes live immediately. Or skip ahead and brief our curation team on your next project.</p>",
-        "primary_label": "Join Trade Program",
-        "primary_link": "shopify://pages/trade-application",
-        "secondary_label": "Download 2026 Trade Lookbook",
-        "secondary_link": "#trade-lookbook",
+        "wordmark": "Society6 Trade",
+        "heading": "Join the Society6 Trade Program",
+        "body": "Access exclusive pricing, curated sourcing support, and scalable art solutions for projects of every size.",
+        "cta_label": "JOIN TRADE",
+        "cta_link": "shopify://pages/trade-application",
         "section_width": "full-width",
         "color_scheme": "scheme-trade-cream"
       }
-    },
-    "newsletter": {
-      "type": "trade-newsletter",
-      "blocks": {
-        "newsletter-signup": {
-          "type": "email-signup",
-          "static": true,
-          "settings": {
-            "heading": "",
-            "heading_preset": "h3",
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border_style": "all",
-            "border_width": 1,
-            "border_radius": 0,
-            "integrated_button": false,
-            "display_type": "text",
-            "label": "Subscribe",
-            "input_type_preset": "paragraph",
-            "button_type_preset": "paragraph",
-            "style_class": "button",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          }
-        }
-      },
-      "settings": {
-        "heading": "Stay in the Trade Loop",
-        "body": "Trade-only drops, curation tips, and project inspiration. No consumer promos."
-      }
     }
   },
-  "order": ["main", "two-path", "benefits", "social-proof", "clients", "case-studies-grid", "how-it-works", "explore", "webinar", "final-cta", "newsletter", "lookbook-modal"]
+  "order": [
+    "trade-hero",
+    "trade-how-we-work",
+    "trade-project-types",
+    "trade-project-guide-modal",
+    "trade-curation-callout",
+    "trade-multi-location",
+    "case-studies-grid",
+    "trade-resources",
+    "lookbook-modal",
+    "trade-final-cta"
+  ]
 }

@@ -1,0 +1,231 @@
+{%- comment -%}
+  sections/trade-curation-callout.liquid
+  Full-width split section: label + headline + body + checklist + CTA left,
+  large image right. Mobile: image stacks above text.
+  Checklist items are blocks so Stephanie can add/remove in the customizer.
+{%- endcomment -%}
+
+{%- assign cta_url = section.settings.cta_link | default: '/pages/trade-application' -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="s6trade-curation section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div class="s6trade-curation__inner">
+
+    <div class="s6trade-curation__left">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="s6trade-curation__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="s6trade-curation__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="s6trade-curation__body">{{ section.settings.body | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="s6trade-curation__checklist">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'check_item' -%}
+              <li class="s6trade-curation__check-item" {{ block.shopify_attributes }}>
+                <span class="s6trade-curation__check-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                {{ block.settings.text | escape }}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank -%}
+        <a class="s6trade-curation__cta" href="{{ cta_url }}">
+          {{- section.settings.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="s6trade-curation__right">
+      {%- if section.settings.image != blank -%}
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          alt="{{ section.settings.image.alt | default: '' | escape }}"
+          class="s6trade-curation__img"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        <div class="s6trade-curation__img-placeholder"></div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .s6trade-curation {
+    padding-block: 0;
+  }
+  .s6trade-curation__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-curation__inner {
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+    }
+  }
+  .s6trade-curation__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 60px);
+    order: 2;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-curation__left { order: 1; }
+  }
+  .s6trade-curation__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .s6trade-curation__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-curation__body {
+    font-family: var(--font-body--family);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-foreground);
+    margin: 0;
+    max-width: 46ch;
+  }
+  .s6trade-curation__checklist {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .s6trade-curation__check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-foreground);
+  }
+  .s6trade-curation__check-icon {
+    flex-shrink: 0;
+    color: var(--color-foreground-heading);
+    line-height: 0;
+  }
+  .s6trade-curation__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+    border-radius: 0;
+    padding: 16px 32px;
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    margin-block-start: 8px;
+  }
+  .s6trade-curation__cta:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+    border-color: var(--color-primary-button-hover-border);
+  }
+  .s6trade-curation__right {
+    overflow: hidden;
+    order: 1;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-curation__right { order: 2; }
+  }
+  .s6trade-curation__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 280px;
+  }
+  .s6trade-curation__img-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    background: var(--color-border);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — Curation Callout",
+  "tag": "section",
+  "class": "s6trade-curation-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "blocks": [
+    {
+      "type": "check_item",
+      "name": "Checklist item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Item text", "default": "Checklist item" }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "header", "content": "Copy" },
+    { "type": "text",     "id": "eyebrow",   "label": "Section label", "default": "CURATION SUPPORT" },
+    { "type": "text",     "id": "heading",   "label": "Headline",      "default": "Curation support designed around your project." },
+    { "type": "textarea", "id": "body",      "label": "Body",          "default": "From boutique spaces to large-scale rollouts, our curation team helps you source artwork that brings your vision to life." },
+    { "type": "text",     "id": "cta_label", "label": "CTA button text","default": "JOIN TRADE PROGRAM" },
+    { "type": "url",      "id": "cta_link",  "label": "CTA button link" },
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Section image" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ],
+  "presets": [
+    {
+      "name": "Trade — Curation Callout",
+      "blocks": [
+        { "type": "check_item", "settings": { "text": "Artwork recommendations" } },
+        { "type": "check_item", "settings": { "text": "Custom framing" } },
+        { "type": "check_item", "settings": { "text": "Variable sourcing support" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

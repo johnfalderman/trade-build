@@ -1,0 +1,211 @@
+{%- comment -%}
+  sections/trade-project-types.liquid
+  Section label above a row of image tiles. Each tile (image + label) is
+  an anchor whose href="#trade-project-guide" triggers the project guide
+  modal — same click-interceptor pattern as the lookbook tiles.
+  Mobile: tiles scroll horizontally. Desktop: 5-across grid.
+  "Download Our Project Guide" CTA link below the row also triggers the modal.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="s6trade-pt section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+
+  {%- if section.settings.eyebrow != blank -%}
+    <p class="s6trade-pt__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="s6trade-pt__tiles-scroll">
+      <div class="s6trade-pt__tiles">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tile' -%}
+            <a
+              class="s6trade-pt__tile"
+              href="#trade-project-guide"
+              {{ block.shopify_attributes }}
+            >
+              <div class="s6trade-pt__tile-img-wrap">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.label | escape }}"
+                    class="s6trade-pt__tile-img"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="s6trade-pt__tile-img s6trade-pt__tile-img--placeholder"></div>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.label != blank -%}
+                <p class="s6trade-pt__tile-label">{{ block.settings.label | escape }}</p>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.cta_text != blank -%}
+    <div class="s6trade-pt__cta-wrap">
+      <a class="s6trade-pt__cta" href="#trade-project-guide">
+        {{- section.settings.cta_text | escape -}}
+      </a>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+  .s6trade-pt {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .s6trade-pt__eyebrow {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-foreground-muted);
+    margin: 0 0 32px;
+    text-align: center;
+  }
+
+  /* Scroll container hides overflow on mobile */
+  .s6trade-pt__tiles-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .s6trade-pt__tiles-scroll::-webkit-scrollbar { display: none; }
+
+  .s6trade-pt__tiles {
+    display: flex;
+    gap: 16px;
+    /* min-width keeps tiles from collapsing on mobile */
+    min-width: max-content;
+  }
+  @media screen and (min-width: 900px) {
+    .s6trade-pt__tiles {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      min-width: 0;
+      gap: 20px;
+    }
+  }
+
+  .s6trade-pt__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-decoration: none;
+    width: 200px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  @media screen and (min-width: 900px) {
+    .s6trade-pt__tile {
+      width: auto;
+      flex-shrink: unset;
+    }
+  }
+
+  .s6trade-pt__tile-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: var(--color-border);
+  }
+  .s6trade-pt__tile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .s6trade-pt__tile:hover .s6trade-pt__tile-img {
+    transform: scale(1.04);
+  }
+  .s6trade-pt__tile-img--placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  .s6trade-pt__tile-label {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-heading);
+    margin: 0;
+  }
+
+  .s6trade-pt__cta-wrap {
+    margin-block-start: 32px;
+    text-align: center;
+  }
+  .s6trade-pt__cta {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-foreground-heading);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    letter-spacing: 0.02em;
+  }
+  .s6trade-pt__cta:hover {
+    text-decoration-thickness: 2px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — Project Types",
+  "tag": "section",
+  "class": "s6trade-pt-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Project type tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Tile image" },
+        { "type": "text",         "id": "label", "label": "Tile label", "default": "PROJECT TYPE" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "settings": [
+    { "type": "header", "content": "Section copy" },
+    { "type": "text", "id": "eyebrow",  "label": "Section label", "default": "DESIGNED FOR EVERY TYPE OF PROJECT" },
+    { "type": "text", "id": "cta_text", "label": "CTA link text", "default": "Download Our Project Guide >" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ],
+  "presets": [
+    {
+      "name": "Trade — Project Types",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "HOSPITALITY" } },
+        { "type": "tile", "settings": { "label": "HEALTHCARE" } },
+        { "type": "tile", "settings": { "label": "RESIDENTIAL" } },
+        { "type": "tile", "settings": { "label": "SHORT-TERM RENTALS" } },
+        { "type": "tile", "settings": { "label": "COMMERCIAL" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

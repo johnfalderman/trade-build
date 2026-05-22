@@ -1,0 +1,281 @@
+{%- comment -%}
+  sections/trade-hero.liquid
+  Split hero: text content left, image right on desktop, stacked on mobile.
+  Benefits bar (4 icon + label + body columns) sits below the hero split,
+  full-width, as a 2×2 grid on mobile and 4-across on desktop.
+  Benefits are blocks so count and copy are editable in the customizer.
+{%- endcomment -%}
+
+{%- assign cta_url = section.settings.cta_link | default: '/pages/trade-application' -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="s6trade-hero section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+
+  <div class="s6trade-hero__split">
+    <div class="s6trade-hero__content">
+      {%- if section.settings.heading != blank -%}
+        <h1 class="s6trade-hero__heading">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.subhead != blank -%}
+        <p class="s6trade-hero__subhead">{{ section.settings.subhead | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank -%}
+        <a class="s6trade-hero__cta" href="{{ cta_url }}">
+          {{- section.settings.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="s6trade-hero__media">
+      {%- if section.settings.hero_image != blank -%}
+        <img
+          src="{{ section.settings.hero_image | image_url: width: 1400 }}"
+          alt="{{ section.settings.hero_image.alt | default: '' | escape }}"
+          class="s6trade-hero__img"
+          width="{{ section.settings.hero_image.width }}"
+          height="{{ section.settings.hero_image.height }}"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {%- else -%}
+        <div class="s6trade-hero__img-placeholder"></div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="s6trade-hero__benefits">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'benefit' -%}
+          <div class="s6trade-hero__benefit" {{ block.shopify_attributes }}>
+            <div class="s6trade-hero__benefit-icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'tag' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                {%- when 'palette' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                {%- when 'house' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                {%- when 'grid' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                {%- when 'star' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'check' -%}
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {%- endcase -%}
+            </div>
+            {%- if block.settings.label != blank -%}
+              <p class="s6trade-hero__benefit-label">{{ block.settings.label | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="s6trade-hero__benefit-body">{{ block.settings.body | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+  .s6trade-hero {
+    padding-block: 0;
+  }
+  .s6trade-hero__split {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-hero__split {
+      grid-template-columns: 1fr 1fr;
+      min-height: 540px;
+    }
+  }
+  .s6trade-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 60px);
+    order: 2;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-hero__content { order: 1; }
+  }
+  .s6trade-hero__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(32px, 4vw, 54px);
+    font-weight: 600;
+    line-height: 1.05;
+    margin: 0;
+    color: var(--color-foreground-heading);
+  }
+  .s6trade-hero__subhead {
+    font-family: var(--font-body--family);
+    font-size: clamp(15px, 1.5vw, 17px);
+    line-height: 1.65;
+    color: var(--color-foreground);
+    margin: 0;
+    max-width: 46ch;
+  }
+  .s6trade-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
+    border-radius: 0;
+    padding: 16px 32px;
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    margin-block-start: 8px;
+  }
+  .s6trade-hero__cta:hover {
+    background: var(--color-primary-button-hover-background);
+    color: var(--color-primary-button-hover-text);
+    border-color: var(--color-primary-button-hover-border);
+  }
+  .s6trade-hero__media {
+    overflow: hidden;
+    order: 1;
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-hero__media { order: 2; }
+  }
+  .s6trade-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 280px;
+  }
+  .s6trade-hero__img-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    background: var(--color-border);
+  }
+
+  /* Benefits bar */
+  .s6trade-hero__benefits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-block-start: 1px solid var(--color-border);
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-hero__benefits {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .s6trade-hero__benefit {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: clamp(20px, 3vw, 36px) clamp(16px, 2.5vw, 28px);
+    border-inline-end: 1px solid var(--color-border);
+    border-block-end: 1px solid var(--color-border);
+  }
+  /* Remove right border on last column, bottom border on last row */
+  @media screen and (max-width: 749px) {
+    .s6trade-hero__benefit:nth-child(2n) { border-inline-end: none; }
+    .s6trade-hero__benefit:nth-last-child(-n+2) { border-block-end: none; }
+  }
+  @media screen and (min-width: 750px) {
+    .s6trade-hero__benefit { border-block-end: none; }
+    .s6trade-hero__benefit:last-child { border-inline-end: none; }
+  }
+  .s6trade-hero__benefit-icon {
+    color: var(--color-foreground-heading);
+    line-height: 0;
+  }
+  .s6trade-hero__benefit-label {
+    font-family: var(--font-accent--family);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-foreground-heading);
+    margin: 0;
+  }
+  .s6trade-hero__benefit-body {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Hero",
+  "tag": "section",
+  "class": "s6trade-hero-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "tag",     "label": "Tag / pricing" },
+            { "value": "palette", "label": "Palette / curation" },
+            { "value": "house",   "label": "House / building" },
+            { "value": "grid",    "label": "Grid / multi-location" },
+            { "value": "star",    "label": "Star" },
+            { "value": "check",   "label": "Checkmark" }
+          ],
+          "default": "tag"
+        },
+        { "type": "text", "id": "label", "label": "Label",     "default": "BENEFIT LABEL" },
+        { "type": "text", "id": "body",  "label": "Body text", "default": "Short description of this benefit." }
+      ]
+    }
+  ],
+  "settings": [
+    { "type": "header", "content": "Hero copy" },
+    { "type": "text",     "id": "heading",   "label": "Headline",       "default": "Curated art for every kind of space." },
+    { "type": "textarea", "id": "subhead",   "label": "Subheadline",    "default": "Exclusive trade pricing, expert curation support, and scalable sourcing for hospitality, healthcare, residential, and commercial projects." },
+    { "type": "text",     "id": "cta_label", "label": "CTA button text","default": "JOIN TRADE PROGRAM" },
+    { "type": "url",      "id": "cta_link",  "label": "CTA button link" },
+    { "type": "header", "content": "Hero image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "header", "content": "Section appearance" },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width",  "label": "Page width" },
+        { "value": "full-width",  "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-trade-cream" }
+  ],
+  "presets": [
+    {
+      "name": "Trade Hero",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "tag",     "label": "TRADE PRICING",          "body": "Exclusive pricing for trade professionals." } },
+        { "type": "benefit", "settings": { "icon": "palette", "label": "CURATION SUPPORT",        "body": "Personalized art curation to match your project vision." } },
+        { "type": "benefit", "settings": { "icon": "house",   "label": "DOMESTIC PRODUCTION",     "body": "Quality products made in the U.S., delivered efficiently." } },
+        { "type": "benefit", "settings": { "icon": "grid",    "label": "MULTI-LOCATION PROGRAMS", "body": "Streamlined solutions for single or multiple properties." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

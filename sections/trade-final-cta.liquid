@@ -1,122 +1,114 @@
 {%- comment -%}
   sections/trade-final-cta.liquid
-  Centered eyebrow + heading + subhead + dual CTAs on cream-2
-  (#f1ebe2) background. cream-2 is hardcoded because we don't have a
-  separate scheme for it yet — settings_data.json edits are ask-first.
-  Buttons inherit the scheme's primary/secondary button colors.
+  Horizontal bottom bar: wordmark left, headline + body center, CTA right.
+  Full-width on desktop; stacks to column on mobile (wordmark top, CTA bottom).
 {%- endcomment -%}
 
-<div class="trade-final-cta-bg color-{{ section.settings.color_scheme }}"></div>
-<div class="trade-final-cta section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
-  <div class="trade-final-cta__inner">
-    {%- if section.settings.eyebrow != blank -%}
-      <p class="trade-final-cta__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+{%- assign cta_url = section.settings.cta_link | default: '/pages/trade-application' -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="s6trade-final-cta section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}">
+  <div class="s6trade-final-cta__inner">
+
+    {%- if section.settings.wordmark != blank -%}
+      <p class="s6trade-final-cta__wordmark">{{ section.settings.wordmark | escape }}</p>
     {%- endif -%}
-    {%- if section.settings.heading != blank -%}
-      <h2 class="trade-final-cta__heading">{{ section.settings.heading | escape }}</h2>
-    {%- endif -%}
-    {%- if section.settings.subhead != blank -%}
-      <div class="trade-final-cta__subhead">{{ section.settings.subhead }}</div>
-    {%- endif -%}
-    <div class="trade-final-cta__buttons">
-      {%- if section.settings.primary_label != blank and section.settings.primary_link != blank -%}
-        <a class="trade-final-cta__btn trade-final-cta__btn--primary" href="{{ section.settings.primary_link }}">
-          {{- section.settings.primary_label | escape -}}
-        </a>
+
+    <div class="s6trade-final-cta__copy">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="s6trade-final-cta__heading">{{ section.settings.heading | escape }}</h2>
       {%- endif -%}
-      {%- if section.settings.secondary_label != blank and section.settings.secondary_link != blank -%}
-        <a class="trade-final-cta__btn trade-final-cta__btn--secondary" href="{{ section.settings.secondary_link }}">
-          {{- section.settings.secondary_label | escape -}}
-        </a>
+      {%- if section.settings.body != blank -%}
+        <p class="s6trade-final-cta__body">{{ section.settings.body | escape }}</p>
       {%- endif -%}
     </div>
+
+    {%- if section.settings.cta_label != blank -%}
+      <div class="s6trade-final-cta__action">
+        <a class="s6trade-final-cta__btn" href="{{ cta_url }}">
+          {{- section.settings.cta_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+
   </div>
 </div>
 
 {% stylesheet %}
-  .trade-final-cta-bg {
-    background: #f1ebe2;
-    grid-column: 1 / -1;
-    grid-row: 1 / 2;
-  }
-  .trade-final-cta {
-    padding-block: clamp(48px, 6vw, 80px);
+  .s6trade-final-cta {
+    padding-block: clamp(40px, 5vw, 64px);
     background: #f1ebe2;
   }
-  .trade-final-cta__inner {
-    max-width: 720px;
-    margin-inline: auto;
-    text-align: center;
+  .s6trade-final-cta__inner {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    align-items: center;
+    gap: 24px;
+    align-items: flex-start;
   }
-  .trade-final-cta__eyebrow {
-    font-family: var(--font-accent--family);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--color-foreground-muted);
-    margin: 0;
+  @media screen and (min-width: 900px) {
+    .s6trade-final-cta__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 48px;
+    }
   }
-  .trade-final-cta__heading {
+  .s6trade-final-cta__wordmark {
     font-family: var(--font-heading--family);
-    font-size: clamp(28px, 3.4vw, 44px);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-foreground-heading);
+    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .s6trade-final-cta__copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .s6trade-final-cta__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(20px, 2.2vw, 28px);
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1.15;
     margin: 0;
     color: var(--color-foreground-heading);
   }
-  .trade-final-cta__subhead {
+  .s6trade-final-cta__body {
     font-family: var(--font-body--family);
-    font-size: 17px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.6;
     color: var(--color-foreground);
+    margin: 0;
     max-width: 56ch;
   }
-  .trade-final-cta__subhead :where(p) { margin: 0; }
-  .trade-final-cta__buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin-block-start: 16px;
+  .s6trade-final-cta__action {
+    flex-shrink: 0;
   }
-  .trade-final-cta__btn {
+  .s6trade-final-cta__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    border: 1.5px solid var(--color-primary-button-border);
     border-radius: 0;
     padding: 16px 32px;
     font-family: var(--font-body--family);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     text-decoration: none;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
-  .trade-final-cta__btn--primary {
-    background: var(--color-primary-button-background);
-    color: var(--color-primary-button-text);
-    border: 1.5px solid var(--color-primary-button-border);
-  }
-  .trade-final-cta__btn--primary:hover {
+  .s6trade-final-cta__btn:hover {
     background: var(--color-primary-button-hover-background);
     color: var(--color-primary-button-hover-text);
     border-color: var(--color-primary-button-hover-border);
-  }
-  .trade-final-cta__btn--secondary {
-    background: var(--color-secondary-button-background);
-    color: var(--color-secondary-button-text);
-    border: 1.5px solid var(--color-secondary-button-border);
-  }
-  .trade-final-cta__btn--secondary:hover {
-    background: var(--color-secondary-button-hover-background);
-    color: var(--color-secondary-button-hover-text);
-    border-color: var(--color-secondary-button-hover-border);
   }
 {% endstylesheet %}
 
@@ -124,18 +116,15 @@
 {
   "name": "Trade Final CTA",
   "tag": "section",
-  "class": "trade-final-cta-wrapper section-wrapper",
+  "class": "s6trade-final-cta-wrapper section-wrapper",
   "disabled_on": { "groups": ["header"] },
   "settings": [
     { "type": "header", "content": "Copy" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Ready When You Are" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Apply for trade access in under two minutes." },
-    { "type": "richtext", "id": "subhead", "label": "Subhead" },
-    { "type": "header", "content": "Buttons" },
-    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Join Trade Program" },
-    { "type": "url", "id": "primary_link", "label": "Primary button link" },
-    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Request a Curated Collection" },
-    { "type": "url", "id": "secondary_link", "label": "Secondary button link" },
+    { "type": "text",     "id": "wordmark",  "label": "Wordmark / logo text", "default": "Society6 Trade" },
+    { "type": "text",     "id": "heading",   "label": "Headline",             "default": "Join the Society6 Trade Program" },
+    { "type": "textarea", "id": "body",      "label": "Body",                 "default": "Access exclusive pricing, curated sourcing support, and scalable art solutions for projects of every size." },
+    { "type": "text",     "id": "cta_label", "label": "CTA button text",      "default": "JOIN TRADE" },
+    { "type": "url",      "id": "cta_link",  "label": "CTA button link" },
     { "type": "header", "content": "Section appearance" },
     {
       "type": "select",
